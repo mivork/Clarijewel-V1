@@ -2279,3 +2279,39 @@ button:disabled {
   font-size: 0.875rem;
   color: var(--color-muted);
 }
+
+/* ニュース本文（マークダウン） */
+.news-body {
+  line-height: 1.9;
+}
+
+.news-body > * + * {
+  margin-block-start: 1em;
+}
+
+.news-body h2 {
+  margin-block-start: 2em;
+  font-size: 1.25rem;
+  color: var(--color-accent);
+}
+
+.news-body h3 {
+  font-size: 1.0625rem;
+}
+
+.news-body ul,
+.news-body ol {
+  padding-inline-start: 1.5em;
+}
+
+.news-body a {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.news-body img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--color-border);
+}

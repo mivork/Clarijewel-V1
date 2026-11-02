@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { fetchNewsArticle } from "@/lib/api";
+import NewsBody from "@/components/NewsBody";
 
 export default async function NewsDetailPage({
   params,
@@ -21,7 +22,7 @@ export default async function NewsDetailPage({
         </p>
       )}
       <h1 style={{ fontSize: "1.6rem", marginTop: 8 }}>{article.title}</h1>
-      <p style={{ whiteSpace: "pre-wrap", lineHeight: 1.8 }}>{article.body}</p>
+      <NewsBody body={article.body} />
 
       <a href="/news" style={{ display: "inline-block", marginTop: 24 }}>
         ← ニュース一覧に戻る
