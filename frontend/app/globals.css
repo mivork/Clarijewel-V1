@@ -1604,7 +1604,7 @@ button:disabled {
 }
 
 .home-categories__item .placeholder-box {
-  aspect-ratio: 3 / 2;
+  aspect-ratio: 2 / 3;
 }
 
 .home-categories__item:hover .placeholder-box {
@@ -1649,42 +1649,6 @@ button:disabled {
   font-size: 0.9375rem;
   color: var(--color-muted);
   line-height: 1.7;
-}
-
-/* 店舗・ご相談：文字のリンクだけの一覧 */
-.home-visit__list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  border-top: 1px solid var(--color-border);
-}
-
-.home-visit__list li {
-  border-bottom: 1px solid var(--color-border);
-}
-
-.home-visit__list a {
-  display: flex;
-  justify-content: space-between;
-  padding-block: 1rem;
-  color: var(--color-text);
-  text-decoration: none;
-}
-
-.home-visit__list a::after {
-  content: "→";
-  color: var(--color-muted);
-}
-
-.home-visit__list a:hover {
-  color: var(--color-accent);
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
-}
-
-.home-empty {
-  padding-block: 2rem;
-  color: var(--color-muted);
 }
 
 /* 条件から探す（専用ページ） */

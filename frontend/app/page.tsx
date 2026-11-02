@@ -189,22 +189,6 @@ export default async function HomePage() {
           </p>
         )}
 
-        <section id="visit" className="home-visit" aria-labelledby="home-visit-title">
-          <h2 id="home-visit-title" className="home-heading">
-            店舗・ご相談
-          </h2>
-          <ul className="home-visit__list">
-            <li>
-              <a href="/stores">店舗のご案内</a>
-            </li>
-            <li>
-              <a href="/reserve/visit">来店予約</a>
-            </li>
-            <li>
-              <a href="/reserve/online">オンライン相談</a>
-            </li>
-          </ul>
-        </section>
       </div>
     </div>
   );
