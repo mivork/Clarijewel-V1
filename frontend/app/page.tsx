@@ -159,23 +159,6 @@ export default async function HomePage() {
           </ul>
         </section>
 
-        <section id="features" className="home-features" aria-labelledby="home-features-title">
-          <h2 id="home-features-title" className="home-heading">
-            特集
-          </h2>
-          <ul className="home-features__grid">
-            {FEATURES.map((feature) => (
-              <li key={feature.href}>
-                <a href={feature.href} className="home-features__item">
-                  <span className="placeholder-box" aria-hidden="true" />
-                  <span className="home-features__title">{feature.title}</span>
-                  <span className="home-features__body">{feature.body}</span>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </section>
-
         {homeProducts.length > 0 && (
           <section id="recommended" className="home-section" aria-labelledby="home-recommended-title">
             <h2 id="home-recommended-title" className="home-heading">
@@ -193,6 +176,23 @@ export default async function HomePage() {
             <HomeProductGrid products={newArrivals} />
           </section>
         )}
+
+        <section id="features" className="home-features" aria-labelledby="home-features-title">
+          <h2 id="home-features-title" className="home-heading">
+            特集
+          </h2>
+          <ul className="home-features__grid">
+            {FEATURES.map((feature) => (
+              <li key={feature.href}>
+                <a href={feature.href} className="home-features__item">
+                  <span className="placeholder-box" aria-hidden="true" />
+                  <span className="home-features__title">{feature.title}</span>
+                  <span className="home-features__body">{feature.body}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
 
         {products.length === 0 && (
           <p className="home-empty">
