@@ -1,3 +1,4 @@
+import Link from "next/link";
 export default function VisitReservationPage() {
   return (
     <div className="container" style={{ padding: "48px 24px", maxWidth: 720 }}>
@@ -6,11 +7,11 @@ export default function VisitReservationPage() {
       <section style={{ marginBottom: 40 }}>
         <p>
           全店舗、サロン形態でお客様をお迎えしております。店舗一覧・営業時間は
-          <a href="/#stores"> 店舗情報</a>
+          <Link href="/#stores"> 店舗情報</Link>
           をご確認ください。
         </p>
         <p>
-          ご予約は<a href="/mypage#consultation"> マイページの専門家への相談予約フォーム</a>
+          ご予約は<Link href="/mypage#consultation"> マイページの専門家への相談予約フォーム</Link>
           より「店舗相談」を選択のうえお申し込みください(会員登録・ログインが必要です)。
         </p>
       </section>
@@ -18,9 +19,9 @@ export default function VisitReservationPage() {
       <section>
         <p style={{ color: "var(--color-muted)" }}>
           会員登録がお済みでない方は
-          <a href="/register"> 新規登録</a>
+          <Link href="/register"> 新規登録</Link>
           へ。ご不明点は
-          <a href="/contact"> お問い合わせ</a>
+          <Link href="/contact"> お問い合わせ</Link>
           からもご連絡いただけます。
         </p>
       </section>

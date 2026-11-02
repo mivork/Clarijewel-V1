@@ -1,3 +1,4 @@
+import Link from "next/link";
 export default function EmailVerifiedPage() {
   return (
     <div className="container" style={{ maxWidth: 420, padding: "48px 24px" }}>
@@ -9,10 +10,10 @@ export default function EmailVerifiedPage() {
       </p>
       <p style={{ marginTop: 16, lineHeight: 1.8 }}>
         はじめてのご購入にお使いいただける10%の優待コードを、ご登録のメールアドレスにお送りしました。
-        <a href="/mypage">マイページ</a>からもご確認いただけます。
+        <Link href="/mypage">マイページ</Link>からもご確認いただけます。
       </p>
       <p style={{ marginTop: 16 }}>
-        <a href="/">トップページへ</a>
+        <Link href="/">トップページへ</Link>
       </p>
     </div>
   );

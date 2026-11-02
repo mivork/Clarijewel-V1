@@ -7,6 +7,7 @@ import CouponSection from "@/components/mypage/CouponSection";
 import PurchaseSection from "@/components/mypage/PurchaseSection";
 import WishlistSection from "@/components/mypage/WishlistSection";
 import ConsultationSection from "@/components/mypage/ConsultationSection";
+import Link from "next/link";
 
 export default function MyPage() {
   const { user, isLoading } = useAuth();
@@ -23,10 +24,10 @@ export default function MyPage() {
     return (
       <div className="container" style={{ padding: 48 }}>
         <p>
-          マイページを利用するには <a href="/login">ログイン</a> してください。
+          マイページを利用するには <Link href="/login">ログイン</Link> してください。
         </p>
         <p style={{ marginTop: 16 }}>
-          <a href="/verify">鑑定書 真贋照会はこちら →</a>
+          <Link href="/verify">鑑定書 真贋照会はこちら →</Link>
         </p>
       </div>
     );
@@ -36,7 +37,7 @@ export default function MyPage() {
     <div className="container" style={{ padding: "48px 24px" }}>
       <h1 style={{ fontSize: "1.5rem", marginBottom: 32 }}>マイページ</h1>
       <p style={{ marginBottom: 32 }}>
-        <a href="/verify">鑑定書 真贋照会はこちら →</a>
+        <Link href="/verify">鑑定書 真贋照会はこちら →</Link>
       </p>
       <ProfileSection />
       <TutorialSetting />
