@@ -23,14 +23,26 @@ export default async function NewsListPage() {
             >
               <a
                 href={`/news/${article.id}`}
-                style={{ display: "flex", flexDirection: "column", gap: 4 }}
+                style={{ display: "grid", gridTemplateColumns: article.thumbnail_url ? "120px 1fr" : "1fr", gap: 16, alignItems: "center" }}
               >
+                {article.thumbnail_url && (
+                  <img
+                    src={article.thumbnail_url}
+                    alt=""
+                    width={120}
+                    height={90}
+                    loading="lazy"
+                    style={{ width: 120, height: 90, objectFit: "cover", border: "1px solid var(--color-border)" }}
+                  />
+                )}
+                <span style={{ display: "flex", flexDirection: "column", gap: 4 }}>
                 {article.published_at && (
                   <span style={{ color: "var(--color-muted)", fontSize: "0.85rem" }}>
                     {new Date(article.published_at).toLocaleDateString("ja-JP")}
                   </span>
                 )}
                 <span style={{ fontSize: "1.05rem" }}>{article.title}</span>
+                </span>
               </a>
             </li>
           ))}
