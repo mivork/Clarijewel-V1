@@ -141,7 +141,9 @@ export default async function HomePage({
   return (
     <div>
       <section className="hero">
-        <HeroCarousel images={HERO_IMAGES} />
+        <div className="container">
+          <HeroCarousel images={HERO_IMAGES} />
+        </div>
       </section>
 
       <div className="container">
