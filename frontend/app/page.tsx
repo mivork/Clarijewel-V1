@@ -53,7 +53,7 @@ const FEATURES = [
   },
   {
     title: "店舗のご案内",
-    body: "完全予約制のサロン4店舗のご案内",
+    body: "4店舗のサロンのご案内",
     href: "/stores",
   },
 ];
