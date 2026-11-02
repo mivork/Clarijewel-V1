@@ -1,6 +1,5 @@
 import { fetchProducts, fetchNewsArticles, type Product } from "@/lib/api";
 import HeroCarousel from "@/components/HeroCarousel";
-import ProductCarousel from "@/components/ProductCarousel";
 
 // リング専用ページ（/rings）で個別に紹介するアイテムは、ホームの一覧からは除外する
 const HOME_EXCLUDED_SKUS = ["CLJ-PDIA-001", "CLJ-AMY-001"];
@@ -68,6 +67,27 @@ function formatDate(value: string | null): string | null {
   });
 }
 
+// 正方形の枠に商品を並べる（横4列。表示件数で段数が決まる）
+function HomeProductGrid({ products }: { products: Product[] }) {
+  return (
+    <ul className="home-products">
+      {products.map((product) => (
+        <li key={product.id}>
+          <a href={`/products/${product.id}`} className="home-product">
+            <span className="placeholder-box" aria-hidden="true" />
+            <span className="home-product__brand">CLARIJEWEL</span>
+            <span className="home-product__name">{product.name}</span>
+            <span className="home-product__price">
+              &yen;{product.price.toLocaleString()}
+              <span className="home-product__tax">（税込）</span>
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 export default async function HomePage() {
   // Laravel APIが未起動のうちはエラーになるため、catchして空の一覧にする
   const products = await fetchProducts().catch(() => []);
@@ -76,6 +96,8 @@ export default async function HomePage() {
   const homeProducts: Product[] = products.filter(
     (p) => !HOME_EXCLUDED_SKUS.includes(p.sku ?? "")
   );
+  // 新商品は登録の新しい順に8件（横4列×2段）
+  const newArrivals = [...homeProducts].sort((a, b) => b.id - a.id).slice(0, 8);
 
   return (
     <div>
@@ -148,7 +170,16 @@ export default async function HomePage() {
             <h2 id="home-recommended-title" className="home-heading">
               今月のおすすめ
             </h2>
-            <ProductCarousel products={homeProducts} />
+            <HomeProductGrid products={homeProducts.slice(0, 4)} />
+          </section>
+        )}
+
+        {newArrivals.length > 0 && (
+          <section id="new-arrivals" className="home-section" aria-labelledby="home-new-title">
+            <h2 id="home-new-title" className="home-heading">
+              新商品
+            </h2>
+            <HomeProductGrid products={newArrivals} />
           </section>
         )}
 
