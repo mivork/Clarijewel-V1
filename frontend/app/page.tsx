@@ -2,6 +2,7 @@ import { fetchProducts, fetchNewsArticles, type Product } from "@/lib/api";
 import ProductGrid from "@/components/ProductGrid";
 import ProductSearchForm from "@/components/ProductSearchForm";
 import HeroCarousel from "@/components/HeroCarousel";
+import ProductCarousel from "@/components/ProductCarousel";
 import { GEM_TYPES } from "@/lib/constants";
 
 // リング専用ページ（/rings）で個別に紹介するアイテムは、ホームの一覧からは除外する
@@ -45,6 +46,41 @@ const ITEM_CATEGORIES = [
   { label: "イヤーカフ", href: "/ear-cuffs" },
   { label: "ブレスレット", href: "/bracelets" },
   { label: "ルース（裸石）", href: "/loose-stones" },
+];
+
+// 特集（Pick up）。リンク先は実装済みのページ
+const PICKUP_ITEMS = [
+  {
+    title: "ご購入ガイド",
+    body: "お支払い・お届け・返品について",
+    href: "/guide",
+  },
+  {
+    title: "店舗で相談する",
+    body: "完全予約制のサロンで、ご相談を承ります",
+    href: "/reserve/visit",
+  },
+  {
+    title: "会員特典",
+    body: "会員登録で、お買い物に使えるクーポンをプレゼント",
+    href: "/register",
+  },
+];
+
+// 誕生石（月ごと）。birthstone_month で商品を絞り込む
+const BIRTHSTONES = [
+  { month: 1, name: "ガーネット" },
+  { month: 2, name: "アメジスト" },
+  { month: 3, name: "アクアマリン" },
+  { month: 4, name: "ダイヤモンド" },
+  { month: 5, name: "エメラルド" },
+  { month: 6, name: "真珠" },
+  { month: 7, name: "ルビー" },
+  { month: 8, name: "ペリドット" },
+  { month: 9, name: "サファイア" },
+  { month: 10, name: "オパール" },
+  { month: 11, name: "トパーズ" },
+  { month: 12, name: "タンザナイト" },
 ];
 
 // 「Clarijewel の約束」。実装済みの機能（鑑定書・真贋照会・マイページ）に基づく
@@ -195,15 +231,47 @@ export default async function HomePage({
           </div>
         </section>
 
-        {newArrivals.length > 0 && (
-          <section id="new-arrivals" className="home-section">
-            <h2 className="section-title">新着アイテム</h2>
-            <ProductGrid products={newArrivals} />
-            <a href="#search" className="home-more">
-              条件から探す →
-            </a>
+        {homeProducts.length > 0 && (
+          <section id="recommended" className="home-section">
+            <h2 className="section-title">今月のおすすめ</h2>
+            <ProductCarousel products={homeProducts} />
           </section>
         )}
+
+        {newArrivals.length > 0 && (
+          <section id="new-arrivals" className="home-section">
+            <h2 className="section-title">新着商品</h2>
+            <ProductCarousel products={newArrivals} />
+          </section>
+        )}
+
+        <section id="pickup" className="home-section">
+          <h2 className="section-title">特集</h2>
+          <div className="home-pickup">
+            {PICKUP_ITEMS.map((item) => (
+              <a key={item.href} href={item.href} className="home-pickup__item">
+                <div className="placeholder-box" aria-hidden="true" />
+                <h3>{item.title}</h3>
+                <p>{item.body}</p>
+              </a>
+            ))}
+          </div>
+        </section>
+
+        <section id="birthstone" className="home-section">
+          <h2 className="section-title">誕生石から探す</h2>
+          <div className="home-birthstones">
+            {BIRTHSTONES.map((stone) => (
+              <a
+                key={stone.month}
+                href={`/?birthstone_month=${stone.month}`}
+                className="home-chip"
+              >
+                {stone.month}月 {stone.name}
+              </a>
+            ))}
+          </div>
+        </section>
 
         <section id="gems" className="home-section">
           <h2 className="section-title">宝石から探す</h2>

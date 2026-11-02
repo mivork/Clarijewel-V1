@@ -1570,3 +1570,165 @@ button:disabled {
     padding: 1.25rem;
   }
 }
+/* トップの商品カルーセル。左端から商品を並べ、右側に次の商品を見せる。端までいったらループする
+   幅は var(--product-slide-width)、間隔は var(--product-gap) で調整する */
+.product-carousel-section {
+  padding-block: 2rem 2.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.product-carousel {
+  --product-slide-width: clamp(11rem, 20vw, 15rem);
+  --product-gap: 1.5rem;
+  position: relative;
+}
+
+.product-carousel__viewport {
+  overflow: hidden;
+  touch-action: pan-y;
+}
+
+.product-carousel__track {
+  display: flex;
+  gap: var(--product-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  transition: transform 650ms ease;
+}
+
+.product-carousel__slide {
+  flex: 0 0 var(--product-slide-width);
+  min-width: 0;
+}
+
+.product-carousel__card {
+  display: grid;
+  gap: 0.5rem;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.product-carousel__card:hover .product-carousel__name {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+/* 商品画像は準備中のため、枠だけ置く（デモ） */
+.product-carousel__image {
+  display: block;
+  aspect-ratio: 1 / 1;
+  background: #ffffff;
+  border: 1px solid var(--color-border);
+}
+
+.product-carousel__brand {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  color: var(--color-muted);
+}
+
+.product-carousel__name {
+  display: -webkit-box;
+  min-height: 3em;
+  overflow: hidden;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.product-carousel__price {
+  font-size: 1rem;
+  color: var(--color-accent);
+}
+
+.product-carousel__tax {
+  margin-inline-start: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--color-muted);
+}
+
+/* 矢印は44px四方以上（WCAG 2.2 2.5.8）。画像の高さの中央に重ねる */
+.product-carousel__arrow {
+  position: absolute;
+  top: calc(var(--product-slide-width) / 2);
+  z-index: 1;
+  translate: 0 -50%;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.8);
+  color: #ffffff;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.product-carousel__arrow:hover {
+  background: var(--color-accent);
+}
+
+.product-carousel__arrow--prev {
+  left: 0.5rem;
+}
+
+.product-carousel__arrow--next {
+  right: 0.5rem;
+}
+
+/* キーボード操作の目印は消さない（WCAG 2.2 2.4.13） */
+.product-carousel :focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product-carousel__track,
+  .product-carousel__arrow {
+    transition: none;
+  }
+}
+
+@media (max-width: 40rem) {
+  .product-carousel-section {
+    padding-block: 1.5rem 2rem;
+  }
+}
+
+
+/* 特集（Pick up）と誕生石：画像は枠のまま */
+.home-pickup {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 1.5rem;
+}
+
+.home-pickup__item {
+  display: grid;
+  gap: 0.75rem;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.home-pickup__item h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.home-pickup__item p {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--color-muted);
+}
+
+.home-birthstones {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
+  gap: 0.5rem;
+}
