@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { useAuth } from "@/lib/AuthContext";
 import { useCart } from "@/lib/CartContext";
 import { logout as logoutRequest } from "@/lib/api";
@@ -77,6 +77,10 @@ function FilterIcon() {
 
 export default function Header() {
   const { user, token, isLoading, clearAuth } = useAuth();
+  // ログイン状態による表示は、マウント後にだけ出す（サーバーとブラウザの初回描画を一致させる）
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  const authReady = mounted && !isLoading;
   const { items } = useCart();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -157,7 +161,7 @@ export default function Header() {
             <UserIcon />
             <span>マイページ</span>
           </a>
-          {!isLoading && user && (
+          {authReady && user && (
             <span className="header-account">
               <span className="header-account-name">{user.name} 様</span>
               <button type="button" onClick={handleLogout}>
@@ -165,7 +169,7 @@ export default function Header() {
               </button>
             </span>
           )}
-          {!isLoading && !user && (
+          {authReady && !user && (
             <span className="header-account">
               <a href="/register">新規登録</a>
               <a href="/login">ログイン</a>
