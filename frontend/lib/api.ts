@@ -123,6 +123,7 @@ export type AuthUser = {
 };
 
 export type Profile = AuthUser & {
+  tutorial_progress: string[];
   birthday: string | null;
   anniversary_date: string | null;
   preferred_metal: string | null;
