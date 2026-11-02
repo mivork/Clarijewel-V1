@@ -44,6 +44,7 @@ class ProfileController extends Controller
             'preferred_size' => $user->preferred_size,
             'lifetime_spend' => $user->lifetime_spend,
             'tutorial_enabled' => $user->tutorial_enabled,
+            'tutorial_progress' => $user->tutorial_progress ?? [],
         ];
     }
 }
