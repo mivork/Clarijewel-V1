@@ -13,12 +13,14 @@ class NewsArticle extends Model
         'title',
         'body',
         'published_at',
+        'is_important',
     ];
 
     protected function casts(): array
     {
         return [
             'published_at' => 'datetime',
+            'is_important' => 'boolean',
         ];
     }
 }

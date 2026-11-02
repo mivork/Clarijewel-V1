@@ -99,8 +99,19 @@ export default async function HomePage() {
   // 新商品は登録の新しい順に8件（横4列×2段）
   const newArrivals = [...homeProducts].sort((a, b) => b.id - a.id).slice(0, 8);
 
+  // 重要な告知（メンテナンス・価格改定など）は、ヘッダーの下に細い帯で出す
+  const importantNotice = newsArticles.find((article) => article.is_important);
+  const regularNews = newsArticles.filter((article) => !article.is_important);
+
   return (
     <div>
+      {importantNotice && (
+        <a href={`/news/${importantNotice.id}`} className="home-notice">
+          <span className="home-notice__label">重要</span>
+          <span className="home-notice__title">{importantNotice.title}</span>
+        </a>
+      )}
+
       <section className="hero">
         <div className="container">
           <HeroCarousel slides={HERO_SLIDES} />
@@ -108,14 +119,14 @@ export default async function HomePage() {
       </section>
 
       <div className="container">
-        {newsArticles.length > 0 && (
+        {regularNews.length > 0 && (
           <section id="news" className="home-news" aria-labelledby="home-news-title">
             <div className="home-news__head">
               <h2 id="home-news-title">お知らせ</h2>
               <a href="/news">すべてのお知らせ</a>
             </div>
             <ul className="home-news__list">
-              {newsArticles.slice(0, 3).map((article) => (
+              {regularNews.slice(0, 3).map((article) => (
                 <li key={article.id}>
                   <a href={`/news/${article.id}`}>
                     <time className="home-news__date" dateTime={article.published_at ?? undefined}>

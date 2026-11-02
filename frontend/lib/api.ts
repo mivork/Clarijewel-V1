@@ -82,6 +82,7 @@ export type NewsArticle = {
   title: string;
   body: string;
   published_at: string | null;
+  is_important: boolean;
 };
 
 export async function fetchNewsArticles(): Promise<NewsArticle[]> {
