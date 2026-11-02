@@ -1,14 +1,32 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/AuthContext";
-import { updateProfile } from "@/lib/api";
+import { fetchProfile, updateProfile } from "@/lib/api";
 
-// 新規登録後にチュートリアルを自動で表示するかの設定
+// チュートリアルの項目（バックエンドの TutorialController::STEPS と同じキー）
+const STEP_LABELS: { key: string; label: string }[] = [
+  { key: "viewed_product", label: "商品ページを見る" },
+  { key: "viewed_guide", label: "ご購入ガイドを読む" },
+  { key: "viewed_news", label: "お知らせを読む" },
+  { key: "viewed_verify", label: "鑑定書を照会する" },
+  { key: "added_to_wishlist", label: "お気に入りに入れる" },
+  { key: "added_to_cart", label: "カートに入れる" },
+];
+
+// 新規登録後にチュートリアルを自動で表示するかの設定と、達成状況
 export default function TutorialSetting() {
   const { user, token, setAuth } = useAuth();
   const [message, setMessage] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [progress, setProgress] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (!token) return;
+    fetchProfile(token)
+      .then((profile) => setProgress(profile.tutorial_progress ?? []))
+      .catch(() => setProgress([]));
+  }, [token]);
 
   if (!user || !token) return null;
 
@@ -26,6 +44,8 @@ export default function TutorialSetting() {
     }
   };
 
+  const achieved = STEP_LABELS.filter((step) => progress.includes(step.key)).length;
+
   return (
     <section className="tutorial-setting">
       <h2>チュートリアル</h2>
@@ -41,6 +61,23 @@ export default function TutorialSetting() {
       <p className="tutorial-setting__note">
         オフにしても、ガイドページの「チュートリアルをもう一度見る」からいつでも見られます。
       </p>
+
+      <p className="tutorial-setting__progress">
+        達成 {achieved} / {STEP_LABELS.length}
+      </p>
+      <ul className="tutorial-setting__steps">
+        {STEP_LABELS.map((step) => {
+          const done = progress.includes(step.key);
+          return (
+            <li key={step.key} className={done ? "is-done" : undefined}>
+              <span aria-hidden="true">{done ? "✓" : "□"}</span>
+              <span>{step.label}</span>
+              <span className="visually-hidden">{done ? "（達成）" : "（未達成）"}</span>
+            </li>
+          );
+        })}
+      </ul>
+
       {message && (
         <p role="status" className="tutorial-setting__note">
           {message}
