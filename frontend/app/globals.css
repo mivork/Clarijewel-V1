@@ -2050,3 +2050,82 @@ button:disabled {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+
+/* ホーム：横長バナー（店舗・お直し）。画像と文字を左右に並べ、交互に入れ替える */
+.home-banners {
+  display: grid;
+  gap: 3rem;
+  margin-block-start: 4rem;
+}
+
+.home-banner {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  align-items: center;
+  gap: 2rem;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.home-banner--reverse {
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+}
+
+.home-banner--reverse .placeholder-box {
+  order: 2;
+}
+
+.home-banner .placeholder-box {
+  aspect-ratio: 5 / 2;
+}
+
+.home-banner:hover .placeholder-box {
+  border-color: var(--color-accent);
+}
+
+.home-banner__text {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.home-banner__en {
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  color: var(--color-muted);
+}
+
+.home-banner__title {
+  font-size: 1.5rem;
+  letter-spacing: 0.04em;
+  color: var(--color-accent);
+}
+
+.home-banner__body {
+  font-size: 0.9375rem;
+  line-height: 1.8;
+  color: var(--color-muted);
+}
+
+.home-banner__more {
+  justify-self: start;
+  margin-block-start: 0.5rem;
+  padding-block-end: 0.25rem;
+  border-bottom: 1px solid var(--color-text);
+  font-size: 0.875rem;
+}
+
+.home-banner:hover .home-banner__more {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+@media (max-width: 40rem) {
+  .home-banner,
+  .home-banner--reverse {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .home-banner--reverse .placeholder-box {
+    order: 0;
+  }
+}

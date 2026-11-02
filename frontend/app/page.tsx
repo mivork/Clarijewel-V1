@@ -44,17 +44,21 @@ const ITEM_CATEGORIES = [
   { label: "ルース（裸石）", href: "/loose-stones" },
 ];
 
-// 特集（分類が違うので、枠は商品カテゴリーより大きく見せる）
-const FEATURES = [
+// 横長のバナー（店舗・リフォーム）。画像と文字は左右に並べ、画像の上に文字は重ねない
+const SERVICE_BANNERS = [
   {
-    title: "ご購入ガイド",
-    body: "お支払い・お届け・返品・鑑定書の受け取りについて",
-    href: "/guide",
+    en: "Salon",
+    title: "店舗のご案内",
+    body: "4店舗のサロンで、宝石をじっくりご覧いただけます。店舗ごとの住所・営業時間・設備をご確認ください。",
+    more: "店舗を見る",
+    href: "/stores",
   },
   {
-    title: "店舗のご案内",
-    body: "4店舗のサロンのご案内",
-    href: "/stores",
+    en: "Reform",
+    title: "サイズ直し・お直し",
+    body: "リングのサイズ直しや、ジュエリーの調整を承ります。マイページのアフターケアからお申し込みいただけます。",
+    more: "アフターケアを見る",
+    href: "/guide#aftercare",
   },
 ];
 
@@ -177,21 +181,22 @@ export default async function HomePage() {
           </section>
         )}
 
-        <section id="features" className="home-features" aria-labelledby="home-features-title">
-          <h2 id="home-features-title" className="home-heading">
-            特集
-          </h2>
-          <ul className="home-features__grid">
-            {FEATURES.map((feature) => (
-              <li key={feature.href}>
-                <a href={feature.href} className="home-features__item">
-                  <span className="placeholder-box" aria-hidden="true" />
-                  <span className="home-features__title">{feature.title}</span>
-                  <span className="home-features__body">{feature.body}</span>
-                </a>
-              </li>
-            ))}
-          </ul>
+        <section id="services" className="home-banners" aria-label="店舗・お直し">
+          {SERVICE_BANNERS.map((banner, index) => (
+            <a
+              key={banner.href}
+              href={banner.href}
+              className={`home-banner${index % 2 === 1 ? " home-banner--reverse" : ""}`}
+            >
+              <span className="placeholder-box" aria-hidden="true" />
+              <span className="home-banner__text">
+                <span className="home-banner__en">{banner.en}</span>
+                <span className="home-banner__title">{banner.title}</span>
+                <span className="home-banner__body">{banner.body}</span>
+                <span className="home-banner__more">{banner.more} →</span>
+              </span>
+            </a>
+          ))}
         </section>
 
         {products.length === 0 && (
