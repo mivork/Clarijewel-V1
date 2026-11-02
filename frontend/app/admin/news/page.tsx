@@ -17,7 +17,14 @@ const emptyForm: NewsArticleInput = {
   body: "",
   published_at: "",
   thumbnail_url: "",
+  is_important: false,
 };
+
+// 公開の状態（公開API・予約投稿と同じ判定）
+function articleStatusLabel(article: AdminNewsArticle): string {
+  if (!article.published_at) return "未公開";
+  return new Date(article.published_at) <= new Date() ? "公開中" : "予約中";
+}
 
 // datetime-local入力用に "YYYY-MM-DDTHH:mm" 形式へ変換
 function toDatetimeLocal(value: string | null): string {
@@ -57,6 +64,7 @@ function AdminNewsContent() {
       body: article.body,
       published_at: toDatetimeLocal(article.published_at),
       thumbnail_url: article.thumbnail_url ?? "",
+      is_important: article.is_important,
     });
   };
 
@@ -143,6 +151,7 @@ function AdminNewsContent() {
           <tr style={{ textAlign: "left", borderBottom: "1px solid var(--color-border)" }}>
             <th style={{ padding: 8 }}>タイトル</th>
             <th style={{ padding: 8 }}>公開日時</th>
+            <th style={{ padding: 8 }}>状態</th>
             <th style={{ padding: 8 }}></th>
           </tr>
         </thead>
@@ -154,6 +163,10 @@ function AdminNewsContent() {
                 {article.published_at
                   ? new Date(article.published_at).toLocaleString("ja-JP")
                   : "-"}
+              </td>
+              <td style={{ padding: 8 }}>
+                {articleStatusLabel(article)}
+                {article.is_important && " / 重要"}
               </td>
               <td style={{ padding: 8, display: "flex", gap: 8 }}>
                 <button type="button" onClick={() => startEdit(article)}>
@@ -220,6 +233,14 @@ function AdminNewsContent() {
               style={{ maxWidth: 240, border: "1px solid var(--color-border)" }}
             />
           )}
+        </label>
+        <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <input
+            type="checkbox"
+            checked={form.is_important ?? false}
+            onChange={(e) => setForm({ ...form, is_important: e.target.checked })}
+          />
+          重要なお知らせ（ホーム上部の帯に表示）
         </label>
         <label style={{ display: "flex", flexDirection: "column", gap: 4 }}>
           本文

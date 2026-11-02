@@ -361,6 +361,7 @@ export type NewsArticleInput = {
   body: string;
   published_at?: string | null;
   thumbnail_url?: string | null;
+  is_important?: boolean;
 };
 
 export async function fetchAdminNewsArticles(token: string): Promise<AdminNewsArticle[]> {
