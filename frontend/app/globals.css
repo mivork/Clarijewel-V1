@@ -340,89 +340,59 @@ a:hover {
   margin: 0 0 20px;
 }
 
-/* トップの商品カルーセル。左端から商品を並べ、右側に次の商品を見せる。端までいったらループする
-   幅は var(--product-slide-width)、間隔は var(--product-gap) で調整する */
-.product-carousel-section {
-  padding-block: 2rem 2.5rem;
+/* メインビジュアル：正方形のバナー画像を横に並べ、右端に次の画像を見せる。端までいったらループする
+   幅は var(--hero-slide-width)、間隔は var(--hero-gap) で調整する */
+.hero {
+  padding-block: 1.5rem 2.5rem;
+  background: var(--color-surface);
   border-bottom: 1px solid var(--color-border);
 }
 
-.product-carousel {
-  --product-slide-width: clamp(11rem, 20vw, 15rem);
-  --product-gap: 1.5rem;
+.hero-carousel {
+  --hero-slide-width: clamp(14rem, 62vw, 23rem);
+  --hero-gap: 1.5rem;
   position: relative;
 }
 
-.product-carousel__viewport {
+.hero-carousel__viewport {
   overflow: hidden;
   touch-action: pan-y;
+  padding-block: 0.5rem;
 }
 
-.product-carousel__track {
+.hero-carousel__track {
   display: flex;
-  gap: var(--product-gap);
+  gap: var(--hero-gap);
   margin: 0;
   padding: 0;
   list-style: none;
   transition: transform 650ms ease;
 }
 
-.product-carousel__slide {
-  flex: 0 0 var(--product-slide-width);
+.hero-carousel__slide {
+  flex: 0 0 var(--hero-slide-width);
   min-width: 0;
 }
 
-.product-carousel__card {
-  display: grid;
-  gap: 0.5rem;
-  color: var(--color-text);
-  text-decoration: none;
-}
-
-.product-carousel__card:hover .product-carousel__name {
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
-}
-
-/* 商品画像は準備中のため、枠だけ置く（デモ） */
-.product-carousel__image {
+.hero-carousel__card {
   display: block;
   aspect-ratio: 1 / 1;
-  background: #ffffff;
-  border: 1px solid var(--color-border);
-}
-
-.product-carousel__brand {
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
-  color: var(--color-muted);
-}
-
-.product-carousel__name {
-  display: -webkit-box;
-  min-height: 3em;
   overflow: hidden;
-  font-size: 0.9375rem;
-  line-height: 1.5;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.12);
 }
 
-.product-carousel__price {
-  font-size: 1rem;
-  color: var(--color-accent);
+.hero-carousel__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-.product-carousel__tax {
-  margin-inline-start: 0.25rem;
-  font-size: 0.75rem;
-  color: var(--color-muted);
-}
-
-/* 矢印は44px四方以上（WCAG 2.2 2.5.8）。画像の高さの中央に重ねる */
-.product-carousel__arrow {
+/* 矢印は44px四方以上（WCAG 2.2 2.5.8）。画像の中央の高さに重ねる */
+.hero-carousel__arrow {
   position: absolute;
-  top: calc(var(--product-slide-width) / 2);
+  top: calc(var(--hero-slide-width) / 2);
   z-index: 1;
   translate: 0 -50%;
   display: grid;
@@ -440,34 +410,74 @@ a:hover {
   transition: background-color 0.3s ease;
 }
 
-.product-carousel__arrow:hover {
+.hero-carousel__arrow:hover {
   background: var(--color-accent);
 }
 
-.product-carousel__arrow--prev {
+.hero-carousel__arrow--prev {
   left: 0.5rem;
 }
 
-.product-carousel__arrow--next {
+.hero-carousel__arrow--next {
   right: 0.5rem;
 }
 
+.hero-carousel__dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.25rem;
+  margin-block-start: 1rem;
+}
+
+.hero-carousel__dot {
+  position: relative;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.hero-carousel__dot::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--color-muted);
+  opacity: 0.5;
+  translate: -50% -50%;
+  transition: width 0.3s ease, height 0.3s ease, opacity 0.3s ease;
+}
+
+.hero-carousel__dot.is-active::before {
+  width: 0.75rem;
+  height: 0.75rem;
+  background: var(--color-accent);
+  opacity: 1;
+}
+
 /* キーボード操作の目印は消さない（WCAG 2.2 2.4.13） */
-.product-carousel :focus-visible {
+.hero-carousel :focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .product-carousel__track,
-  .product-carousel__arrow {
+  .hero-carousel__track,
+  .hero-carousel__arrow,
+  .hero-carousel__dot::before {
     transition: none;
   }
 }
 
 @media (max-width: 40rem) {
-  .product-carousel-section {
-    padding-block: 1.5rem 2rem;
+  .hero {
+    padding-block: 1rem 1.5rem;
   }
 }
 

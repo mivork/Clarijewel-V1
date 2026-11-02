@@ -2,11 +2,17 @@
 
 import Link from "next/link";
 import { useEffect, useState, type TouchEvent } from "react";
-import type { Product } from "@/lib/api";
 
-// 商品を3セット並べ、真ん中のセットを表示する。端まで来たら見た目が変わらないように真ん中へ戻して、ループして見せる
-export default function ProductCarousel({ products }: { products: Product[] }) {
-  const count = products.length;
+// スライドは正方形の画像のみ。文字は画像の中にデザインとして入れる（画像の上に文字を重ねない）
+export type HeroSlide = {
+  src: string;
+  alt: string;
+  href: string;
+};
+
+// 画像を3セット並べ、真ん中のセットを表示する。端まで来たら見た目が変わらないように真ん中へ戻して、ループして見せる
+export default function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
+  const count = slides.length;
   const [position, setPosition] = useState(count);
   const [animate, setAnimate] = useState(true);
   const [reduceMotion, setReduceMotion] = useState(false);
@@ -21,7 +27,7 @@ export default function ProductCarousel({ products }: { products: Product[] }) {
     return () => media.removeEventListener("change", handleChange);
   }, []);
 
-  // 端に来た位置を、同じ商品が見える真ん中のセットへ戻す（アニメーションなし）
+  // 端に来た位置を、同じスライドが見える真ん中のセットへ戻す（アニメーションなし）
   const wrapIfNeeded = () => {
     if (position < count || position >= 2 * count) {
       setAnimate(false);
@@ -44,14 +50,15 @@ export default function ProductCarousel({ products }: { products: Product[] }) {
 
   if (count === 0) return null;
 
+  const activeIndex = ((position % count) + count) % count;
   const move = (delta: number) => setPosition((prev) => prev + delta);
-  const items = [...products, ...products, ...products];
+  const items = [...slides, ...slides, ...slides];
 
   return (
     <div
-      className="product-carousel"
+      className="hero-carousel"
       role="region"
-      aria-label="商品一覧"
+      aria-label="メインビジュアル"
       aria-roledescription="カルーセル"
       onTouchStart={(event) => setTouchStartX(event.touches[0]?.clientX ?? null)}
       onTouchEnd={(event: TouchEvent<HTMLDivElement>) => {
@@ -63,36 +70,37 @@ export default function ProductCarousel({ products }: { products: Product[] }) {
         setTouchStartX(null);
       }}
     >
-      <div className="product-carousel__viewport">
+      <div className="hero-carousel__viewport">
         <ul
-          className="product-carousel__track"
+          className="hero-carousel__track"
           style={{
-            transform: `translateX(calc(-${position} * (var(--product-slide-width) + var(--product-gap))))`,
+            transform: `translateX(calc(-${position} * (var(--hero-slide-width) + var(--hero-gap))))`,
             transition: animate ? undefined : "none",
           }}
           onTransitionEnd={wrapIfNeeded}
         >
-          {items.map((product, i) => {
+          {items.map((slide, i) => {
             const setNumber = Math.floor(i / count);
             const isCurrentSet = setNumber === 1;
             return (
               <li
-                key={`${setNumber}-${product.id}`}
-                className="product-carousel__slide"
+                key={`${setNumber}-${slide.src}`}
+                className="hero-carousel__slide"
                 aria-hidden={!isCurrentSet}
               >
                 <Link
-                  href={`/products/${product.id}`}
-                  className="product-carousel__card"
+                  href={slide.href}
+                  className="hero-carousel__card"
                   tabIndex={isCurrentSet ? undefined : -1}
                 >
-                  <span className="product-carousel__image" aria-hidden="true" />
-                  <span className="product-carousel__brand">CLARIJEWEL</span>
-                  <span className="product-carousel__name">{product.name}</span>
-                  <span className="product-carousel__price">
-                    &yen;{product.price.toLocaleString()}
-                    <span className="product-carousel__tax">（税込）</span>
-                  </span>
+                  <img
+                    className="hero-carousel__image"
+                    src={slide.src}
+                    alt={slide.alt}
+                    width={800}
+                    height={800}
+                    fetchPriority={i === count ? "high" : "auto"}
+                  />
                 </Link>
               </li>
             );
@@ -102,20 +110,33 @@ export default function ProductCarousel({ products }: { products: Product[] }) {
 
       <button
         type="button"
-        className="product-carousel__arrow product-carousel__arrow--prev"
-        aria-label="前の商品"
+        className="hero-carousel__arrow hero-carousel__arrow--prev"
+        aria-label="前のメインビジュアル"
         onClick={() => move(-1)}
       >
         ‹
       </button>
       <button
         type="button"
-        className="product-carousel__arrow product-carousel__arrow--next"
-        aria-label="次の商品"
+        className="hero-carousel__arrow hero-carousel__arrow--next"
+        aria-label="次のメインビジュアル"
         onClick={() => move(1)}
       >
         ›
       </button>
+
+      <div className="hero-carousel__dots">
+        {slides.map((slide, i) => (
+          <button
+            key={slide.src}
+            type="button"
+            className={`hero-carousel__dot${i === activeIndex ? " is-active" : ""}`}
+            aria-label={`${i + 1}枚目を表示`}
+            aria-current={i === activeIndex}
+            onClick={() => setPosition(count + i)}
+          />
+        ))}
+      </div>
     </div>
   );
 }
