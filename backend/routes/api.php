@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\TutorialController;
+
 use App\Http\Controllers\Api\Admin\AppraisalController as AdminAppraisalController;
 use App\Http\Controllers\Api\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Api\Admin\OrderController as AdminOrderController;
@@ -61,6 +63,7 @@ Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 've
 
 // ログイン必須（Sanctum）
 Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/tutorial/progress', [TutorialController::class, 'store']);
     Route::get('/me', [AuthController::class, 'me']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/email/resend', [EmailVerificationController::class, 'resend']);
