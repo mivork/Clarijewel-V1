@@ -37,47 +37,67 @@ const HERO_SLIDES = [
   },
 ];
 
-const CATEGORY_IMAGES: Partial<Record<(typeof GEM_TYPES)[number], string>> = {
-  ダイヤモンド: "/categories/diamond.jpg",
-  ルビー: "/categories/ruby.jpg",
-  サファイア: "/categories/sapphire.jpg",
-  エメラルド: "/categories/emerald.jpg",
-  パール: "/categories/pearl.jpg",
-  オパール: "/categories/opal.jpg",
-};
+// 商品カテゴリー（各ページの URL に対応）
+const ITEM_CATEGORIES = [
+  { label: "リング", href: "/rings" },
+  { label: "ネックレス", href: "/necklaces" },
+  { label: "ピアス", href: "/earrings" },
+  { label: "イヤーカフ", href: "/ear-cuffs" },
+  { label: "ブレスレット", href: "/bracelets" },
+  { label: "ルース（裸石）", href: "/loose-stones" },
+];
+
+// 「Clarijewel の約束」。実装済みの機能（鑑定書・真贋照会・マイページ）に基づく
+const PROMISES = [
+  {
+    title: "鑑定書付き",
+    body: "鑑定書付きの商品を扱っています。鑑定書はマイページからPDFで受け取れます。",
+  },
+  {
+    title: "真贋照会",
+    body: "鑑定書番号を入力すると、商品の情報をいつでも確認できます。",
+  },
+  {
+    title: "購入後も安心",
+    body: "購入履歴・保証・アフターケアの申し込みを、マイページでまとめて確認できます。",
+  },
+];
+
+const PURCHASE_STEPS = [
+  {
+    title: "商品を選ぶ",
+    body: "気に入った商品をカートに入れます。お気に入り登録もできます。",
+  },
+  {
+    title: "お支払い",
+    body: "クレジットカード、コンビニ払い、PayPayに対応しています。",
+  },
+  {
+    title: "鑑定書を受け取る",
+    body: "ご購入後、マイページから鑑定書をダウンロードできます。",
+  },
+];
 
 const STORES = [
   {
     name: "銀座本店",
-    address: "〒104-0061 東京都中央区銀座（約25坪）",
-    feature: "オンライン配信スタジオ併設・全ラインナップ展示のフラッグシップ拠点",
+    address: "東京都中央区銀座",
     hours: "11:00 - 20:00（完全予約制）",
-    facilities: "CRI90以上高演色照明 / 個室カウンセリングルーム完備",
-    image: "/stores/ginza.jpg",
   },
   {
     name: "横浜サロン",
-    address: "〒220-0012 神奈川県横浜市西区みなとみらい（約15坪）",
-    feature: "首都圏南部エリアの拠点サロン",
+    address: "神奈川県横浜市西区みなとみらい",
     hours: "11:00 - 19:00（完全予約制）",
-    facilities: "CRI90以上高演色照明 / ペア相談ブース",
-    image: "/stores/yokohama.jpg",
   },
   {
     name: "名古屋サロン",
-    address: "〒460-0008 愛知県名古屋市中区栄（約18坪）",
-    feature: "個室カウンセリングブース2席を常設",
+    address: "愛知県名古屋市中区栄",
     hours: "11:00 - 19:00（完全予約制）",
-    facilities: "CRI90以上高演色照明 / 専門カウンセラー常駐",
-    image: "/stores/nagoya.jpg",
   },
   {
     name: "大阪心斎橋サロン",
-    address: "〒542-0081 大阪府大阪市中央区心斎橋筋（約20坪）",
-    feature: "関西エリアの拠点。宝石鑑別士が常駐",
+    address: "大阪府大阪市中央区心斎橋筋",
     hours: "11:00 - 20:00（完全予約制）",
-    facilities: "CRI90以上高演色照明 / 鑑別機器完備",
-    image: "/stores/osaka.jpg",
   },
 ];
 
@@ -105,7 +125,7 @@ export default async function HomePage({
       params.price_max
   );
 
-  // Laravel APIが未起動のうちはエラーになるため、開発初期はcatchしてダミー表示にしてもよい
+  // Laravel APIが未起動のうちはエラーになるため、catchして空の一覧にする
   const products = await fetchProducts({
     q: params.q,
     gem_type: params.gem_type,
@@ -137,20 +157,10 @@ export default async function HomePage({
     );
   }
 
-  const homeProducts = products.filter((p) => !HOME_EXCLUDED_SKUS.includes(p.sku ?? ""));
+  const homeProducts: Product[] = products.filter(
+    (p) => !HOME_EXCLUDED_SKUS.includes(p.sku ?? "")
+  );
   const newArrivals = [...homeProducts].sort((a, b) => b.id - a.id).slice(0, 8);
-
-  const byGemType = new Map<string, Product[]>();
-  const others: Product[] = [];
-  for (const product of homeProducts) {
-    if (product.gem_type && GEM_TYPES.includes(product.gem_type)) {
-      const list = byGemType.get(product.gem_type) ?? [];
-      list.push(product);
-      byGemType.set(product.gem_type, list);
-    } else {
-      others.push(product);
-    }
-  }
 
   return (
     <div>
@@ -161,80 +171,56 @@ export default async function HomePage({
       </section>
 
       <div className="container">
-        {newsArticles.length > 0 && (
-          <section style={{ padding: "48px 0 0" }}>
-            <h2 className="section-title">新着ニュース</h2>
-            <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-              {newsArticles.slice(0, 3).map((article) => (
-                <li
-                  key={article.id}
-                  style={{
-                    borderBottom: "1px solid var(--color-border)",
-                    padding: "12px 0",
-                  }}
-                >
-                  <a
-                    href={`/news/${article.id}`}
-                    style={{ display: "flex", gap: 16, alignItems: "baseline" }}
-                  >
-                    {article.published_at && (
-                      <span style={{ color: "var(--color-muted)", fontSize: "0.85rem" }}>
-                        {new Date(article.published_at).toLocaleDateString("ja-JP")}
-                      </span>
-                    )}
-                    <span>{article.title}</span>
-                  </a>
-                </li>
-              ))}
-            </ul>
-            <a href="/news" style={{ display: "inline-block", marginTop: 12 }}>
-              ニュース一覧を見る →
-            </a>
-          </section>
-        )}
+        <section className="home-promises" aria-labelledby="home-promises-title">
+          <h2 id="home-promises-title" className="visually-hidden">
+            Clarijewel の約束
+          </h2>
+          {PROMISES.map((promise) => (
+            <div key={promise.title} className="home-promises__item">
+              <h3>{promise.title}</h3>
+              <p>{promise.body}</p>
+            </div>
+          ))}
+        </section>
 
-        {newArrivals.length > 0 && (
-          <section id="new-arrivals" style={{ padding: "48px 0 0" }}>
-            <h2 className="section-title">新着アイテム</h2>
-            <ProductGrid products={newArrivals} />
-          </section>
-        )}
-
-        <section id="categories" style={{ padding: "48px 0 0" }}>
-          <h2 className="section-title">カテゴリーから探す</h2>
-          <div className="category-grid">
-            {GEM_TYPES.map((gemType) => (
-              <a
-                key={gemType}
-                href={`/?gem_type=${encodeURIComponent(gemType)}`}
-                className="category-tile"
-              >
-                {CATEGORY_IMAGES[gemType] ? (
-                  <img
-                    src={CATEGORY_IMAGES[gemType]}
-                    alt={gemType}
-                    style={{
-                      width: "100%",
-                      aspectRatio: "4 / 3",
-                      objectFit: "cover",
-                      borderRadius: "var(--radius)",
-                      border: "1px solid var(--color-border)",
-                    }}
-                  />
-                ) : (
-                  <div
-                    className="placeholder-box"
-                    aria-hidden="true"
-                    style={{ aspectRatio: "4 / 3" }}
-                  />
-                )}
-                <span>{gemType}</span>
+        <section id="categories" className="home-section">
+          <h2 className="section-title">商品カテゴリー</h2>
+          <div className="home-item-categories">
+            {ITEM_CATEGORIES.map((category) => (
+              <a key={category.href} href={category.href} className="home-item-category">
+                <div className="placeholder-box" aria-hidden="true" />
+                <span>{category.label}</span>
               </a>
             ))}
           </div>
         </section>
 
-        <section id="search" style={{ padding: "48px 0 0" }}>
+        {newArrivals.length > 0 && (
+          <section id="new-arrivals" className="home-section">
+            <h2 className="section-title">新着アイテム</h2>
+            <ProductGrid products={newArrivals} />
+            <a href="#search" className="home-more">
+              条件から探す →
+            </a>
+          </section>
+        )}
+
+        <section id="gems" className="home-section">
+          <h2 className="section-title">宝石から探す</h2>
+          <div className="home-chips">
+            {GEM_TYPES.map((gemType) => (
+              <a
+                key={gemType}
+                href={`/?gem_type=${encodeURIComponent(gemType)}`}
+                className="home-chip"
+              >
+                {gemType}
+              </a>
+            ))}
+          </div>
+        </section>
+
+        <section id="search" className="home-section">
           <h2 className="section-title">絞り込み検索</h2>
           <ProductSearchForm />
         </section>
@@ -245,56 +231,74 @@ export default async function HomePage({
           </p>
         )}
 
-        {GEM_TYPES.map((gemType) => {
-          const list = byGemType.get(gemType);
-          if (!list || list.length === 0) return null;
-          return (
-            <section key={gemType} style={{ padding: "48px 0 0" }}>
-              <h2 className="section-title">{gemType}</h2>
-              <ProductGrid products={list} />
-            </section>
-          );
-        })}
+        <section id="purchase" className="home-section">
+          <h2 className="section-title">ご購入の流れ</h2>
+          <ol className="home-steps">
+            {PURCHASE_STEPS.map((step, i) => (
+              <li key={step.title} className="home-steps__item">
+                <span className="home-steps__no">STEP {i + 1}</span>
+                <h3>{step.title}</h3>
+                <p>{step.body}</p>
+              </li>
+            ))}
+          </ol>
+        </section>
 
-        {others.length > 0 && (
-          <section style={{ padding: "48px 0 0" }}>
-            <h2 className="section-title">その他</h2>
-            <ProductGrid products={others} />
-          </section>
-        )}
+        <section id="consult" className="home-section">
+          <div className="home-cta">
+            <div>
+              <h2 className="home-cta__title">店舗でじっくりご相談ください</h2>
+              <p className="home-cta__body">
+                完全予約制のサロンで、宝石の見方や商品のご相談ができます。
+              </p>
+            </div>
+            <div className="home-cta__buttons">
+              <a href="/reserve/visit" className="home-cta__button home-cta__button--primary">
+                来店予約
+              </a>
+              <a href="/reserve/online" className="home-cta__button">
+                オンライン相談
+              </a>
+            </div>
+          </div>
+        </section>
 
-        <section id="stores" className="store-info" style={{ padding: "48px 0" }}>
+        <section id="stores" className="home-section">
           <h2 className="section-title">店舗情報</h2>
-          <p style={{ color: "var(--color-muted)", marginBottom: 24 }}>
-            全4店舗、完全予約制サロン形態にてお客様をお迎えしております。
-          </p>
           <div className="store-grid">
             {STORES.map((store) => (
               <div key={store.name} className="store-card">
-                {store.image ? (
-                  <img
-                    src={store.image}
-                    alt={store.name}
-                    style={{
-                      width: "100%",
-                      aspectRatio: "4 / 3",
-                      objectFit: "cover",
-                      borderRadius: "var(--radius)",
-                      marginBottom: 16,
-                    }}
-                  />
-                ) : (
-                  <div className="placeholder-box" aria-hidden="true" />
-                )}
+                <div className="placeholder-box" aria-hidden="true" />
                 <h3>{store.name}</h3>
                 <p>{store.address}</p>
-                <p>{store.feature}</p>
                 <p>営業時間: {store.hours}</p>
-                <p>設備: {store.facilities}</p>
               </div>
             ))}
           </div>
         </section>
+
+        {newsArticles.length > 0 && (
+          <section id="news" className="home-section">
+            <h2 className="section-title">新着ニュース</h2>
+            <ul className="home-news">
+              {newsArticles.slice(0, 3).map((article) => (
+                <li key={article.id} className="home-news__item">
+                  <a href={`/news/${article.id}`}>
+                    {article.published_at && (
+                      <span className="home-news__date">
+                        {new Date(article.published_at).toLocaleDateString("ja-JP")}
+                      </span>
+                    )}
+                    <span>{article.title}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+            <a href="/news" className="home-more">
+              ニュース一覧を見る →
+            </a>
+          </section>
+        )}
       </div>
     </div>
   );
