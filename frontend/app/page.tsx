@@ -7,43 +7,33 @@ import { GEM_TYPES } from "@/lib/constants";
 // リング専用ページ（/rings）で個別に紹介するアイテムは、ホームの一覧からは除外する
 const HOME_EXCLUDED_SKUS = ["CLJ-PDIA-001", "CLJ-AMY-001"];
 
-// メインビジュアルのデモ用データ。本番の画像ができたら src と文言を差し替える
-// 画像の内容を読み上げられるように、画像ごとにaltを入れる
+// メインビジュアルのデモ用データ（正方形のバナー画像）。本番の画像ができたら差し替える
+// 文字は画像の中に入っているため、altにも同じ内容を書いて読み上げに対応する
 const HERO_SLIDES = [
   {
-    src: "/categories/sapphire.jpg",
-    alt: "サファイアのジュエリー",
-    eyebrow: "オンラインストア限定",
-    title: "深青のサファイア特集",
-    href: "/rings",
+    src: "/hero/news/news-autumn.png",
+    alt: "秋の新作コレクション 入荷のお知らせ。ガーネットとシトリンの新作を数量限定で",
+    href: "/news",
   },
   {
-    src: "/categories/diamond.jpg",
-    alt: "ダイヤモンドのジュエリー",
-    eyebrow: "NEW ARRIVALS",
-    title: "新着アイテム",
-    href: "/products",
+    src: "/hero/news/news-care.png",
+    alt: "ジュエリー無料お手入れキャンペーン。超音波洗浄と金具の点検を無料で",
+    href: "/news",
   },
   {
-    src: "/categories/pearl.jpg",
-    alt: "パールのジュエリー",
-    eyebrow: "ギフトのご案内",
-    title: "大切な方への贈り物",
+    src: "/hero/news/news-anniversary.png",
+    alt: "創業10周年記念フェア。期間限定のポイント還元アップ",
+    href: "/news",
+  },
+  {
+    src: "/hero/news/news-member.png",
+    alt: "会員登録で特典クーポン。新規ご登録の方に、お買い物に使えるクーポン",
+    href: "/register",
+  },
+  {
+    src: "/hero/news/news-sizing.png",
+    alt: "リングサイズの無料計測。店舗でお気軽にお試しください",
     href: "/guide",
-  },
-  {
-    src: "/categories/opal.jpg",
-    alt: "オパールのジュエリー",
-    eyebrow: "鑑定書付き",
-    title: "安心して選べる一点もの",
-    href: "/verify",
-  },
-  {
-    src: "/categories/ruby.jpg",
-    alt: "ルビーのジュエリー",
-    eyebrow: "店舗でのご相談",
-    title: "実店舗でじっくり相談",
-    href: "/reserve/visit",
   },
 ];
 

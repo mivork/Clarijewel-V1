@@ -396,38 +396,6 @@ a:hover {
   object-position: center 35%;
 }
 
-/* 写真の下に白い帯を置いて文字を読みやすくする（グラデーションは使わない） */
-.hero-carousel__caption {
-  position: absolute;
-  inset-inline: 0;
-  bottom: 0;
-  display: grid;
-  gap: 0.25rem;
-  padding: 1rem 1.25rem;
-  background: rgba(255, 255, 255, 0.94);
-}
-
-.hero-carousel__eyebrow {
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
-  color: var(--color-muted);
-}
-
-.hero-carousel__title {
-  font-size: 1.125rem;
-  font-weight: 600;
-  line-height: 1.5;
-}
-
-.hero-carousel__cta {
-  justify-self: start;
-  margin-block-start: 0.25rem;
-  font-size: 0.8125rem;
-  color: var(--color-accent);
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
-}
-
 /* 矢印は44px四方以上（WCAG 2.2 2.5.8）。カードの左右の端に重ねる */
 .hero-carousel__arrow {
   position: absolute;
@@ -549,13 +517,6 @@ a:hover {
     padding-block: 1rem 1.5rem;
   }
 
-  .hero-carousel__caption {
-    padding: 0.75rem 0.875rem;
-  }
-
-  .hero-carousel__title {
-    font-size: 1rem;
-  }
 }
 
 .category-grid {

@@ -5,11 +5,10 @@ import { useEffect, useState } from "react";
 
 const SLIDE_INTERVAL_MS = 6000;
 
+// スライドは正方形の画像のみ。文字は画像の中にデザインとして入れる（画像の上に文字を重ねない）
 export type HeroSlide = {
   src: string;
   alt: string;
-  eyebrow: string;
-  title: string;
   href: string;
 };
 
@@ -89,15 +88,10 @@ export default function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
                   className="hero-carousel__image"
                   src={slide.src}
                   alt={slide.alt}
-                  width={1200}
-                  height={1200}
+                  width={800}
+                  height={800}
                   fetchPriority={i === 0 ? "high" : "auto"}
                 />
-                <span className="hero-carousel__caption">
-                  <span className="hero-carousel__eyebrow">{slide.eyebrow}</span>
-                  <span className="hero-carousel__title">{slide.title}</span>
-                  <span className="hero-carousel__cta">詳しく見る</span>
-                </span>
               </Link>
             </li>
           ))}
