@@ -7,19 +7,43 @@ import { GEM_TYPES } from "@/lib/constants";
 // リング専用ページ（/rings）で個別に紹介するアイテムは、ホームの一覧からは除外する
 const HOME_EXCLUDED_SKUS = ["CLJ-PDIA-001", "CLJ-AMY-001"];
 
+// メインビジュアルのデモ用データ。本番の画像ができたら src と文言を差し替える
 // 画像の内容を読み上げられるように、画像ごとにaltを入れる
-const HERO_IMAGES = [
+const HERO_SLIDES = [
   {
-    src: "/hero/main01.png",
-    alt: "耳元を飾るジュエリーを身に着けたモデル",
+    src: "/categories/sapphire.jpg",
+    alt: "サファイアのジュエリー",
+    eyebrow: "オンラインストア限定",
+    title: "深青のサファイア特集",
+    href: "/rings",
   },
   {
-    src: "/hero/main02.png",
-    alt: "重ね着けしたネックレスとリングを楽しむモデル",
+    src: "/categories/diamond.jpg",
+    alt: "ダイヤモンドのジュエリー",
+    eyebrow: "NEW ARRIVALS",
+    title: "新着アイテム",
+    href: "/products",
   },
   {
-    src: "/hero/main03.png",
-    alt: "パールとゴールドの華やかなイヤリング",
+    src: "/categories/pearl.jpg",
+    alt: "パールのジュエリー",
+    eyebrow: "ギフトのご案内",
+    title: "大切な方への贈り物",
+    href: "/guide",
+  },
+  {
+    src: "/categories/opal.jpg",
+    alt: "オパールのジュエリー",
+    eyebrow: "鑑定書付き",
+    title: "安心して選べる一点もの",
+    href: "/verify",
+  },
+  {
+    src: "/categories/ruby.jpg",
+    alt: "ルビーのジュエリー",
+    eyebrow: "店舗でのご相談",
+    title: "実店舗でじっくり相談",
+    href: "/reserve/visit",
   },
 ];
 
@@ -142,7 +166,7 @@ export default async function HomePage({
     <div>
       <section className="hero">
         <div className="container">
-          <HeroCarousel images={HERO_IMAGES} />
+          <HeroCarousel slides={HERO_SLIDES} />
         </div>
       </section>
 

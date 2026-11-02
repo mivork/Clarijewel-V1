@@ -1,16 +1,19 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const SLIDE_INTERVAL_MS = 6000;
 
-// 画像の実寸（1290 × 859）。レイアウトのずれ（CLS）を防ぐために width / height に使う
-const IMAGE_WIDTH = 1290;
-const IMAGE_HEIGHT = 859;
+export type HeroSlide = {
+  src: string;
+  alt: string;
+  eyebrow: string;
+  title: string;
+  href: string;
+};
 
-export type HeroImage = { src: string; alt: string };
-
-export default function HeroCarousel({ images }: { images: HeroImage[] }) {
+export default function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
   const [index, setIndex] = useState(0);
   const [hovered, setHovered] = useState(false);
   const [isPlaying, setIsPlaying] = useState(true);
@@ -18,10 +21,10 @@ export default function HeroCarousel({ images }: { images: HeroImage[] }) {
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
 
   const showSlide = (nextIndex: number) => {
-    setIndex((nextIndex + images.length) % images.length);
+    setIndex((nextIndex + slides.length) % slides.length);
   };
 
-  // 視差効果などの動きを減らす設定の利用者には、自動で切り替えない（WCAG 2.2 2.2.2）
+  // 動きを減らす設定の利用者には、自動で切り替えない（WCAG 2.2 2.2.2）
   useEffect(() => {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
     setReduceMotion(media.matches);
@@ -30,17 +33,17 @@ export default function HeroCarousel({ images }: { images: HeroImage[] }) {
     return () => media.removeEventListener("change", handleChange);
   }, []);
 
-  const isAutoplaying = images.length > 1 && isPlaying && !hovered && !reduceMotion;
+  const isAutoplaying = slides.length > 1 && isPlaying && !hovered && !reduceMotion;
 
   useEffect(() => {
     if (!isAutoplaying) return;
 
     const timer = setInterval(() => {
-      setIndex((prev) => (prev + 1) % images.length);
+      setIndex((prev) => (prev + 1) % slides.length);
     }, SLIDE_INTERVAL_MS);
 
     return () => clearInterval(timer);
-  }, [images.length, isAutoplaying]);
+  }, [slides.length, isAutoplaying]);
 
   return (
     <div
@@ -60,34 +63,52 @@ export default function HeroCarousel({ images }: { images: HeroImage[] }) {
         setTouchStartX(null);
       }}
     >
-      <div
-        className="hero-track"
-        style={{ transform: `translateX(-${index * 100}%)` }}
-        aria-live={isAutoplaying ? "off" : "polite"}
-      >
-        {images.map((image, i) => (
-          <div
-            key={image.src}
-            className="hero-slide"
-            aria-hidden={i !== index}
-            aria-roledescription="スライド"
-          >
-            <img
-              src={image.src}
-              alt={image.alt}
-              width={IMAGE_WIDTH}
-              height={IMAGE_HEIGHT}
-              fetchPriority={i === 0 ? "high" : "auto"}
-            />
-          </div>
-        ))}
+      <div className="hero-carousel__viewport">
+        <ul
+          className="hero-carousel__track"
+          style={{
+            // 選択中のカードを左端に置き、右側に次のカードを見せる
+            transform: `translateX(calc(-${index} * (var(--hero-slide-width) + var(--hero-gap))))`,
+          }}
+          aria-live={isAutoplaying ? "off" : "polite"}
+        >
+          {slides.map((slide, i) => (
+            <li
+              key={slide.src}
+              className="hero-carousel__slide"
+              aria-roledescription="スライド"
+              aria-label={`${i + 1} / ${slides.length}`}
+              aria-hidden={i !== index}
+            >
+              <Link
+                href={slide.href}
+                className="hero-carousel__card"
+                tabIndex={i === index ? 0 : -1}
+              >
+                <img
+                  className="hero-carousel__image"
+                  src={slide.src}
+                  alt={slide.alt}
+                  width={1200}
+                  height={1200}
+                  fetchPriority={i === 0 ? "high" : "auto"}
+                />
+                <span className="hero-carousel__caption">
+                  <span className="hero-carousel__eyebrow">{slide.eyebrow}</span>
+                  <span className="hero-carousel__title">{slide.title}</span>
+                  <span className="hero-carousel__cta">詳しく見る</span>
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
       </div>
 
-      {images.length > 1 && (
+      {slides.length > 1 && (
         <>
           <button
             type="button"
-            className="hero-arrow hero-arrow-prev"
+            className="hero-carousel__arrow hero-carousel__arrow--prev"
             aria-label="前のメインビジュアル"
             onClick={() => showSlide(index - 1)}
           >
@@ -95,19 +116,20 @@ export default function HeroCarousel({ images }: { images: HeroImage[] }) {
           </button>
           <button
             type="button"
-            className="hero-arrow hero-arrow-next"
+            className="hero-carousel__arrow hero-carousel__arrow--next"
             aria-label="次のメインビジュアル"
             onClick={() => showSlide(index + 1)}
           >
             ›
           </button>
-          <div className="hero-controls">
-            <div className="hero-dots">
-              {images.map((image, i) => (
+
+          <div className="hero-carousel__controls">
+            <div className="hero-carousel__dots">
+              {slides.map((slide, i) => (
                 <button
-                  key={image.src}
+                  key={slide.src}
                   type="button"
-                  className={`hero-dot${i === index ? " active" : ""}`}
+                  className={`hero-carousel__dot${i === index ? " is-active" : ""}`}
                   aria-label={`${i + 1}枚目を表示`}
                   aria-current={i === index}
                   onClick={() => showSlide(i)}
@@ -116,11 +138,11 @@ export default function HeroCarousel({ images }: { images: HeroImage[] }) {
             </div>
             <button
               type="button"
-              className="hero-pause"
+              className="hero-carousel__pause"
               aria-pressed={!isPlaying}
               onClick={() => setIsPlaying((prev) => !prev)}
             >
-              {isPlaying ? "停止" : "再生"}
+              {isPlaying ? "一時停止" : "再生"}
               <span className="visually-hidden">
                 {isPlaying ? "（自動切り替えを止める）" : "（自動切り替えを再開する）"}
               </span>
