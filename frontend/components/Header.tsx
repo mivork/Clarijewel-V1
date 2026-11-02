@@ -180,7 +180,6 @@ export default function Header() {
             <HomeIcon />
             ホーム
           </a>
-          <a href="/">人気ランキング</a>
           <a href="/#new-arrivals">新着アイテム</a>
           <a href="/search">条件から探す</a>
           <details className="header-purpose">
