@@ -7,19 +7,19 @@ import { GEM_TYPES } from "@/lib/constants";
 // リング専用ページ（/rings）で個別に紹介するアイテムは、ホームの一覧からは除外する
 const HOME_EXCLUDED_SKUS = ["CLJ-PDIA-001", "CLJ-AMY-001"];
 
-// 画像内にキャッチコピーが入っているため、altに同じ文言を入れて読み上げに対応する
+// 画像の内容を読み上げられるように、画像ごとにaltを入れる
 const HERO_IMAGES = [
   {
-    src: "/hero/blue-sapphire.jpg",
-    alt: "凛とした気品をまとう深青の輝きが、魅了する。BLUE SAPPHIRE",
+    src: "/hero/main01.png",
+    alt: "耳元を飾るジュエリーを身に着けたモデル",
   },
   {
-    src: "/hero/pink-sapphire.jpg",
-    alt: "ロマンチックな色彩が、大人の女性の指先と胸元を上品に彩ります。PINK SAPPHIRE",
+    src: "/hero/main02.png",
+    alt: "重ね着けしたネックレスとリングを楽しむモデル",
   },
   {
-    src: "/hero/red-sapphire.jpg",
-    alt: "深い情熱を宿す鮮烈な赤の輝きが心を奪う。RED SAPPHIRE",
+    src: "/hero/main03.png",
+    alt: "パールとゴールドの華やかなイヤリング",
   },
 ];
 
@@ -123,7 +123,7 @@ export default async function HomePage({
     );
   }
 
-  const homeProducts = products.filter((p) => !HOME_EXCLUDED_SKUS.includes(p.sku));
+  const homeProducts = products.filter((p) => !HOME_EXCLUDED_SKUS.includes(p.sku ?? ""));
   const newArrivals = [...homeProducts].sort((a, b) => b.id - a.id).slice(0, 8);
 
   const byGemType = new Map<string, Product[]>();
