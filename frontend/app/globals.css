@@ -2017,14 +2017,16 @@ button:disabled {
   }
 }
 
-/* ホーム：重要な告知の帯（ヘッダーの直下、1行） */
+/* ホーム：重要な告知の帯（ヘッダーと同じ面・境界線で、1行だけ見せる） */
 .home-notice {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.625rem 1.5rem;
-  background: var(--color-accent);
-  color: #ffffff;
+  min-height: 2.5rem;
+  padding: 0.5rem 1.5rem;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text);
   font-size: 0.875rem;
   text-decoration: none;
 }
@@ -2037,7 +2039,8 @@ button:disabled {
 .home-notice__label {
   flex: 0 0 auto;
   padding: 0.125rem 0.5rem;
-  border: 1px solid #ffffff;
+  border: 1px solid var(--color-danger);
+  color: var(--color-danger);
   font-size: 0.75rem;
   letter-spacing: 0.06em;
 }
