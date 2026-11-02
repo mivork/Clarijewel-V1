@@ -5,7 +5,7 @@ export default function VisitReservationPage() {
 
       <section style={{ marginBottom: 40 }}>
         <p>
-          全店舗、完全予約制のサロン形態でお客様をお迎えしております。店舗一覧・営業時間は
+          全店舗、サロン形態でお客様をお迎えしております。店舗一覧・営業時間は
           <a href="/#stores"> 店舗情報</a>
           をご確認ください。
         </p>
