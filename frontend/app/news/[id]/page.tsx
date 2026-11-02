@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { fetchNewsArticle } from "@/lib/api";
 import NewsBody from "@/components/NewsBody";
+import TutorialStep from "@/components/TutorialStep";
 
 export default async function NewsDetailPage({
   params,
@@ -15,6 +16,8 @@ export default async function NewsDetailPage({
   }
 
   return (
+  <>
+    <TutorialStep step="viewed_news" />
     <div className="container" style={{ padding: "48px 24px", maxWidth: 800 }}>
       {article.published_at && (
         <p style={{ color: "var(--color-muted)", fontSize: "0.85rem" }}>
@@ -35,5 +38,6 @@ export default async function NewsDetailPage({
         ← ニュース一覧に戻る
       </a>
     </div>
+  </>
   );
 }

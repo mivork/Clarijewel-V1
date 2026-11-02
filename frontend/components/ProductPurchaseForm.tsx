@@ -5,6 +5,7 @@ import { useCart } from "@/lib/CartContext";
 import { useAuth } from "@/lib/AuthContext";
 import {
   addToWishlist,
+  recordTutorialStep,
   fetchWishlists,
   removeFromWishlist,
   STOCK_STATUS_LABEL,
@@ -48,6 +49,7 @@ export default function ProductPurchaseForm({ product }: { product: Product }) {
       } else {
         await addToWishlist(token, product.id);
         setIsWishlisted(true);
+        recordTutorialStep(token, "added_to_wishlist");
       }
     } finally {
       setWishlistBusy(false);
