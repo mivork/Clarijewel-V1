@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { Suspense, type ReactNode } from "react";
 import Header from "@/components/Header";
 import WelcomePopup from "@/components/WelcomePopup";
+import Tutorial from "@/components/Tutorial";
 import { ITEM_TYPE_PATHS } from "@/lib/constants";
 
 function InstagramIcon() {
@@ -110,6 +111,7 @@ export default function SiteChrome({ children }: { children: ReactNode }) {
       )}
       <main>{children}</main>
       {!isAdmin && <WelcomePopup />}
+      {!isAdmin && <Tutorial />}
       {!isAdmin && (
         <footer className="site-footer">
           <div className="container footer-top">

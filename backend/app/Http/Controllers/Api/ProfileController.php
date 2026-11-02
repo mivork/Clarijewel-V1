@@ -20,6 +20,7 @@ class ProfileController extends Controller
             'anniversary_date' => ['nullable', 'date'],
             'preferred_metal' => ['nullable', 'string', 'max:100'],
             'preferred_size' => ['nullable', 'string', 'max:50'],
+            'tutorial_enabled' => ['sometimes', 'boolean'],
         ]);
 
         $user = $request->user();
@@ -42,6 +43,7 @@ class ProfileController extends Controller
             'preferred_metal' => $user->preferred_metal,
             'preferred_size' => $user->preferred_size,
             'lifetime_spend' => $user->lifetime_spend,
+            'tutorial_enabled' => $user->tutorial_enabled,
         ];
     }
 }

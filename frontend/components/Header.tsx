@@ -183,6 +183,15 @@ export default function Header() {
           <a href="/">人気ランキング</a>
           <a href="/#new-arrivals">新着アイテム</a>
           <a href="/search">条件から探す</a>
+          <details className="header-purpose">
+            <summary>目的から探す</summary>
+            <div className="header-purpose__menu">
+              <a href="/search">贈り物を探す</a>
+              <a href="/guide#aftercare">サイズ直し・お直し</a>
+              <a href="/verify">鑑定書を確認する</a>
+              <a href="/stores">店舗で相談する</a>
+            </div>
+          </details>
         </nav>
         <nav className="header-nav-categories">
           <span className="header-nav-categories-label">カテゴリー：</span>

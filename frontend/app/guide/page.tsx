@@ -21,6 +21,9 @@ export default function GuidePage() {
   return (
     <div className="container" style={{ padding: "48px 24px", maxWidth: 720 }}>
       <h1 style={{ fontSize: "1.5rem", marginBottom: 24 }}>GUIDE</h1>
+      <p style={{ marginBottom: 32 }}>
+        <a href="/?tutorial=1">チュートリアルをもう一度見る</a>
+      </p>
 
       <section id="shipping" style={{ marginBottom: 40 }}>
         <h2 style={{ fontSize: "1.2rem", marginBottom: 16 }}>配送・送料について</h2>

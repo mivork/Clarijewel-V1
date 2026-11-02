@@ -118,6 +118,7 @@ export type AuthUser = {
   is_admin: boolean;
   rank: UserRank;
   email_verified: boolean;
+  tutorial_enabled: boolean;
 };
 
 export type Profile = AuthUser & {
@@ -626,6 +627,7 @@ export async function updateProfile(
     anniversary_date?: string | null;
     preferred_metal?: string | null;
     preferred_size?: string | null;
+    tutorial_enabled?: boolean;
   }
 ): Promise<Profile> {
   const res = await fetch(`${API_BASE_URL}/profile`, {

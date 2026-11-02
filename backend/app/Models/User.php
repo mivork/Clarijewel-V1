@@ -24,6 +24,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'preferred_metal',
         'preferred_size',
         'marketing_opt_in',
+        'tutorial_enabled',
     ];
 
     protected $hidden = [
@@ -38,6 +39,7 @@ class User extends Authenticatable implements MustVerifyEmail
             'password' => 'hashed',
             'is_admin' => 'boolean',
             'is_suspended' => 'boolean',
+            'tutorial_enabled' => 'boolean',
             'birthday' => 'date',
             'anniversary_date' => 'date',
             'marketing_opt_in' => 'boolean',
