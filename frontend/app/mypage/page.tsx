@@ -2,6 +2,7 @@
 
 import { useAuth } from "@/lib/AuthContext";
 import ProfileSection from "@/components/mypage/ProfileSection";
+import TutorialSetting from "@/components/mypage/TutorialSetting";
 import CouponSection from "@/components/mypage/CouponSection";
 import PurchaseSection from "@/components/mypage/PurchaseSection";
 import WishlistSection from "@/components/mypage/WishlistSection";
@@ -38,6 +39,7 @@ export default function MyPage() {
         <a href="/verify">鑑定書 真贋照会はこちら →</a>
       </p>
       <ProfileSection />
+      <TutorialSetting />
       <CouponSection />
       <div id="purchase">
         <PurchaseSection />

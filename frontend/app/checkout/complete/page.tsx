@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { loadStripe, type Stripe } from "@stripe/stripe-js";
 import { useCart } from "@/lib/CartContext";
@@ -19,7 +19,16 @@ const STATUS_MESSAGE: Record<Status, string> = {
   failed: "お支払いに失敗しました。もう一度お試しください。",
 };
 
+// useSearchParams を使うため、静的ビルド時に Suspense で囲む
 export default function CheckoutCompletePage() {
+  return (
+    <Suspense fallback={<p>決済状況を確認しています...</p>}>
+      <CheckoutCompleteContent />
+    </Suspense>
+  );
+}
+
+function CheckoutCompleteContent() {
   const searchParams = useSearchParams();
   const { clearCart } = useCart();
   const [status, setStatus] = useState<Status>("loading");

@@ -340,59 +340,145 @@ a:hover {
   margin: 0 0 20px;
 }
 
+/* メインビジュアル：正方形のバナー画像を横に並べ、右端に次の画像を見せる。端までいったらループする
+   幅は var(--hero-slide-width)、間隔は var(--hero-gap) で調整する */
 .hero {
-  position: relative;
-  aspect-ratio: 16 / 9;
-  overflow: hidden;
+  padding-block: 1.5rem 2.5rem;
   background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .hero-carousel {
-  position: absolute;
-  inset: 0;
+  --hero-slide-width: clamp(14rem, 62vw, 23rem);
+  --hero-gap: 1.5rem;
+  position: relative;
 }
 
-.hero-slide {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transition: opacity 1s ease;
+.hero-carousel__viewport {
+  overflow: hidden;
+  touch-action: pan-y;
+  padding-block: 0.5rem;
 }
 
-.hero-slide.active {
-  opacity: 1;
+.hero-carousel__track {
+  display: flex;
+  gap: var(--hero-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  transition: transform 650ms ease;
 }
 
-.hero-slide img {
+.hero-carousel__slide {
+  flex: 0 0 var(--hero-slide-width);
+  min-width: 0;
+}
+
+.hero-carousel__card {
+  display: block;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.12);
+}
+
+.hero-carousel__image {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center;
 }
 
-.hero-dots {
+/* 矢印は44px四方以上（WCAG 2.2 2.5.8）。画像の中央の高さに重ねる */
+.hero-carousel__arrow {
   position: absolute;
-  left: 50%;
-  bottom: 16px;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 10px;
+  top: calc(var(--hero-slide-width) / 2);
   z-index: 1;
+  translate: 0 -50%;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.8);
+  color: #ffffff;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-.hero-dot {
-  width: 8px;
-  height: 8px;
+.hero-carousel__arrow:hover {
+  background: var(--color-accent);
+}
+
+.hero-carousel__arrow--prev {
+  left: 0.5rem;
+}
+
+.hero-carousel__arrow--next {
+  right: 0.5rem;
+}
+
+.hero-carousel__dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.25rem;
+  margin-block-start: 1rem;
+}
+
+.hero-carousel__dot {
+  position: relative;
+  width: 1.5rem;
+  height: 1.5rem;
   padding: 0;
-  border: 1px solid rgba(255, 255, 255, 0.9);
-  border-radius: 50%;
+  border: 0;
   background: transparent;
   cursor: pointer;
-  transition: background 0.3s ease;
 }
 
-.hero-dot.active {
-  background: rgba(255, 255, 255, 0.9);
+.hero-carousel__dot::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--color-muted);
+  opacity: 0.5;
+  translate: -50% -50%;
+  transition: width 0.3s ease, height 0.3s ease, opacity 0.3s ease;
+}
+
+.hero-carousel__dot.is-active::before {
+  width: 0.75rem;
+  height: 0.75rem;
+  background: var(--color-accent);
+  opacity: 1;
+}
+
+/* キーボード操作の目印は消さない（WCAG 2.2 2.4.13） */
+.hero-carousel :focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-carousel__track,
+  .hero-carousel__arrow,
+  .hero-carousel__dot::before {
+    transition: none;
+  }
+}
+
+@media (max-width: 40rem) {
+  .hero {
+    padding-block: 1rem 1.5rem;
+  }
 }
 
 .category-grid {
@@ -1286,4 +1372,1021 @@ button:disabled {
     padding-left: 16px;
     padding-right: 16px;
   }
+}
+
+/* トップの商品カルーセル。左端から商品を並べ、右側に次の商品を見せる。端までいったらループする
+   幅は var(--product-slide-width)、間隔は var(--product-gap) で調整する */
+.product-carousel-section {
+  padding-block: 2rem 2.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.product-carousel {
+  --product-slide-width: clamp(11rem, 20vw, 15rem);
+  --product-gap: 1.5rem;
+  position: relative;
+}
+
+.product-carousel__viewport {
+  overflow: hidden;
+  touch-action: pan-y;
+}
+
+.product-carousel__track {
+  display: flex;
+  gap: var(--product-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  transition: transform 650ms ease;
+}
+
+.product-carousel__slide {
+  flex: 0 0 var(--product-slide-width);
+  min-width: 0;
+}
+
+.product-carousel__card {
+  display: grid;
+  gap: 0.5rem;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.product-carousel__card:hover .product-carousel__name {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+/* 商品画像は準備中のため、枠だけ置く（デモ） */
+.product-carousel__image {
+  display: block;
+  aspect-ratio: 1 / 1;
+  background: #ffffff;
+  border: 1px solid var(--color-border);
+}
+
+.product-carousel__brand {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  color: var(--color-muted);
+}
+
+.product-carousel__name {
+  display: -webkit-box;
+  min-height: 3em;
+  overflow: hidden;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.product-carousel__price {
+  font-size: 1rem;
+  color: var(--color-accent);
+}
+
+.product-carousel__tax {
+  margin-inline-start: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--color-muted);
+}
+
+/* 矢印は44px四方以上（WCAG 2.2 2.5.8）。画像の高さの中央に重ねる */
+.product-carousel__arrow {
+  position: absolute;
+  top: calc(var(--product-slide-width) / 2);
+  z-index: 1;
+  translate: 0 -50%;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.8);
+  color: #ffffff;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.product-carousel__arrow:hover {
+  background: var(--color-accent);
+}
+
+.product-carousel__arrow--prev {
+  left: 0.5rem;
+}
+
+.product-carousel__arrow--next {
+  right: 0.5rem;
+}
+
+/* キーボード操作の目印は消さない（WCAG 2.2 2.4.13） */
+.product-carousel :focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product-carousel__track,
+  .product-carousel__arrow {
+    transition: none;
+  }
+}
+
+@media (max-width: 40rem) {
+  .product-carousel-section {
+    padding-block: 1.5rem 2rem;
+  }
+}
+
+
+/* --- トップページ（分類ごとに見せ方を変える）--- */
+.home-heading {
+  margin: 0 0 1.5rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--color-text);
+}
+
+.home-section,
+.home-news,
+.home-categories,
+.home-features,
+.home-visit {
+  padding-block: 3.5rem 0;
+}
+
+/* お知らせ：日付・見出し・矢印を列に揃えた一覧 */
+.home-news__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  margin-block-end: 0.5rem;
+  padding-block-end: 0.75rem;
+  border-bottom: 2px solid var(--color-accent);
+}
+
+.home-news__head h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.home-news__head a {
+  font-size: 0.875rem;
+  color: var(--color-muted);
+}
+
+.home-news__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.home-news__list li {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.home-news__list a {
+  display: grid;
+  grid-template-columns: 8rem minmax(0, 1fr) 1.5rem;
+  align-items: baseline;
+  gap: 1rem;
+  padding-block: 1rem;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.home-news__list a:hover .home-news__title {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.home-news__date {
+  font-size: 0.875rem;
+  color: var(--color-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.home-news__title {
+  line-height: 1.6;
+}
+
+.home-news__arrow {
+  justify-self: end;
+  color: var(--color-muted);
+}
+
+/* 商品カテゴリー：3列×2段、すべて同じ 3:2 の枠（同じ分類は揃える） */
+.home-categories__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.home-categories__item {
+  display: grid;
+  gap: 0.75rem;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.home-categories__item .placeholder-box {
+  aspect-ratio: 2 / 3;
+}
+
+.home-categories__item:hover .placeholder-box {
+  border-color: var(--color-accent);
+}
+
+.home-categories__label {
+  font-size: 1rem;
+}
+
+/* 特集：2列、16:9 の大きな枠（分類が違うので、大きさも商品カテゴリーとは変える） */
+.home-features__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.home-features__item {
+  display: grid;
+  gap: 0.75rem;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.home-features__item .placeholder-box {
+  aspect-ratio: 16 / 9;
+}
+
+.home-features__item:hover .placeholder-box {
+  border-color: var(--color-accent);
+}
+
+.home-features__title {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.home-features__body {
+  font-size: 0.9375rem;
+  color: var(--color-muted);
+  line-height: 1.7;
+}
+
+/* 条件から探す（専用ページ） */
+.search-page {
+  padding-block: 3rem 4rem;
+}
+
+.search-page__header {
+  margin-block-end: 2rem;
+}
+
+.search-page__header h1 {
+  margin: 0 0 0.75rem;
+  font-size: 1.5rem;
+  letter-spacing: 0.04em;
+}
+
+.search-page__header p {
+  margin: 0;
+  color: var(--color-muted);
+}
+
+.search-page__results {
+  padding-block-start: 2.5rem;
+}
+
+.search-page__results h2 {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin: 0 0 1rem;
+  font-size: 1.125rem;
+}
+
+.search-page__count {
+  font-size: 0.875rem;
+  color: var(--color-muted);
+  font-weight: 400;
+}
+
+.search-page__empty {
+  color: var(--color-muted);
+}
+
+@media (max-width: 40rem) {
+  .home-categories__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .home-features__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .home-news__list a {
+    grid-template-columns: 6rem minmax(0, 1fr) 1rem;
+  }
+}
+
+/* トップの商品カルーセル。左端から商品を並べ、右側に次の商品を見せる。端までいったらループする
+   幅は var(--product-slide-width)、間隔は var(--product-gap) で調整する */
+.product-carousel-section {
+  padding-block: 2rem 2.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.product-carousel {
+  --product-slide-width: clamp(11rem, 20vw, 15rem);
+  --product-gap: 1.5rem;
+  position: relative;
+}
+
+.product-carousel__viewport {
+  overflow: hidden;
+  touch-action: pan-y;
+}
+
+.product-carousel__track {
+  display: flex;
+  gap: var(--product-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  transition: transform 650ms ease;
+}
+
+.product-carousel__slide {
+  flex: 0 0 var(--product-slide-width);
+  min-width: 0;
+}
+
+.product-carousel__card {
+  display: grid;
+  gap: 0.5rem;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.product-carousel__card:hover .product-carousel__name {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+/* 商品画像は準備中のため、枠だけ置く（デモ） */
+.product-carousel__image {
+  display: block;
+  aspect-ratio: 1 / 1;
+  background: #ffffff;
+  border: 1px solid var(--color-border);
+}
+
+.product-carousel__brand {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  color: var(--color-muted);
+}
+
+.product-carousel__name {
+  display: -webkit-box;
+  min-height: 3em;
+  overflow: hidden;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.product-carousel__price {
+  font-size: 1rem;
+  color: var(--color-accent);
+}
+
+.product-carousel__tax {
+  margin-inline-start: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--color-muted);
+}
+
+/* 矢印は44px四方以上（WCAG 2.2 2.5.8）。画像の高さの中央に重ねる */
+.product-carousel__arrow {
+  position: absolute;
+  top: calc(var(--product-slide-width) / 2);
+  z-index: 1;
+  translate: 0 -50%;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.8);
+  color: #ffffff;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.product-carousel__arrow:hover {
+  background: var(--color-accent);
+}
+
+.product-carousel__arrow--prev {
+  left: 0.5rem;
+}
+
+.product-carousel__arrow--next {
+  right: 0.5rem;
+}
+
+/* キーボード操作の目印は消さない（WCAG 2.2 2.4.13） */
+.product-carousel :focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product-carousel__track,
+  .product-carousel__arrow {
+    transition: none;
+  }
+}
+
+@media (max-width: 40rem) {
+  .product-carousel-section {
+    padding-block: 1.5rem 2rem;
+  }
+}
+
+
+/* 店舗ページ：店舗ごとに大きさと配置を変える */
+.stores-page {
+  padding-block: 3rem 4rem;
+}
+
+.stores-page__header {
+  max-width: 40rem;
+  margin-block-end: 3rem;
+}
+
+.stores-page__header h1 {
+  margin: 0 0 1rem;
+  font-size: 1.75rem;
+  letter-spacing: 0.06em;
+  color: var(--color-accent);
+}
+
+.stores-page__header p {
+  margin: 0;
+  color: var(--color-muted);
+  line-height: 1.8;
+}
+
+.stores-page__store {
+  display: grid;
+  gap: 2rem 3rem;
+  align-items: center;
+  padding-block: 3rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.stores-page__store .placeholder-box {
+  aspect-ratio: 4 / 3;
+}
+
+.stores-page__store--feature {
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+}
+
+.stores-page__store--feature .placeholder-box {
+  aspect-ratio: 16 / 10;
+}
+
+.stores-page__store--square {
+  grid-template-columns: minmax(0, 4fr) minmax(0, 6fr);
+}
+
+.stores-page__store--square .placeholder-box {
+  aspect-ratio: 1 / 1;
+}
+
+.stores-page__store--tall {
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+}
+
+.stores-page__store--tall .placeholder-box {
+  aspect-ratio: 3 / 4;
+}
+
+.stores-page__store--wide {
+  grid-template-columns: minmax(0, 6fr) minmax(0, 4fr);
+}
+
+.stores-page__store--wide .placeholder-box {
+  aspect-ratio: 4 / 3;
+}
+
+.stores-page__store--wide .stores-page__body {
+  order: -1;
+}
+
+.stores-page__body h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.5rem;
+  color: var(--color-accent);
+}
+
+.stores-page__lead {
+  margin: 0 0 1.5rem;
+  color: var(--color-muted);
+  line-height: 1.8;
+}
+
+.stores-page__body dl {
+  display: grid;
+  grid-template-columns: 6rem minmax(0, 1fr);
+  gap: 0.75rem 1rem;
+  margin: 0 0 1.5rem;
+  font-size: 0.9375rem;
+}
+
+.stores-page__body dt {
+  color: var(--color-muted);
+}
+
+.stores-page__body dd {
+  margin: 0;
+}
+
+.stores-page__body ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stores-page__reserve {
+  color: var(--color-accent);
+  text-underline-offset: 0.2em;
+}
+
+@media (max-width: 40rem) {
+  .stores-page__store,
+  .stores-page__store--feature,
+  .stores-page__store--square,
+  .stores-page__store--tall,
+  .stores-page__store--wide {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .stores-page__store--wide .stores-page__body {
+    order: 0;
+  }
+}
+
+/* ホーム：商品は正方形の枠を横4列（スマホは2列）。新商品は表示件数で2段、おすすめは1段 */
+.home-products {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 2.5rem 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.home-product {
+  display: grid;
+  gap: 0.5rem;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.home-product .placeholder-box {
+  aspect-ratio: 1 / 1;
+}
+
+.home-product:hover .placeholder-box {
+  border-color: var(--color-accent);
+}
+
+.home-product__brand {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  color: var(--color-muted);
+}
+
+.home-product__name {
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.home-product__price {
+  font-size: 1rem;
+  color: var(--color-accent);
+}
+
+.home-product__tax {
+  margin-inline-start: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--color-muted);
+}
+
+@media (max-width: 40rem) {
+  .home-products {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2rem 1rem;
+  }
+}
+
+/* ホーム：重要な告知の帯（ヘッダーと同じ面・境界線で、1行だけ見せる） */
+.home-notice {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 2.5rem;
+  padding: 0.5rem 1.5rem;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text);
+  font-size: 0.875rem;
+  text-decoration: none;
+}
+
+.home-notice:hover .home-notice__title {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.home-notice__label {
+  flex: 0 0 auto;
+  color: var(--color-text);
+  font-weight: 600;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+}
+
+.home-notice__title {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* ホーム：横長バナー（店舗・お直し）。画像と文字を左右に並べ、交互に入れ替える */
+.home-banners {
+  display: grid;
+  gap: 3rem;
+  margin-block-start: 4rem;
+}
+
+.home-banner {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  align-items: center;
+  gap: 2rem;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.home-banner--reverse {
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+}
+
+.home-banner--reverse .placeholder-box {
+  order: 2;
+}
+
+.home-banner .placeholder-box {
+  aspect-ratio: 5 / 2;
+}
+
+.home-banner:hover .placeholder-box {
+  border-color: var(--color-accent);
+}
+
+.home-banner__text {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.home-banner__en {
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  color: var(--color-muted);
+}
+
+.home-banner__title {
+  font-size: 1.5rem;
+  letter-spacing: 0.04em;
+  color: var(--color-accent);
+}
+
+.home-banner__body {
+  font-size: 0.9375rem;
+  line-height: 1.8;
+  color: var(--color-muted);
+}
+
+.home-banner__more {
+  justify-self: start;
+  margin-block-start: 0.5rem;
+  padding-block-end: 0.25rem;
+  border-bottom: 1px solid var(--color-text);
+  font-size: 0.875rem;
+}
+
+.home-banner:hover .home-banner__more {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+@media (max-width: 40rem) {
+  .home-banner,
+  .home-banner--reverse {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .home-banner--reverse .placeholder-box {
+    order: 0;
+  }
+}
+
+/* ヘッダー：目的から探す（details で開閉。JS なしで動く） */
+.header-purpose {
+  position: relative;
+}
+
+.header-purpose summary {
+  cursor: pointer;
+  list-style: none;
+}
+
+.header-purpose summary::-webkit-details-marker {
+  display: none;
+}
+
+.header-purpose__menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 20;
+  display: grid;
+  min-width: 14rem;
+  margin-block-start: 0.5rem;
+  padding-block: 0.5rem;
+  background: #ffffff;
+  border: 1px solid var(--color-border);
+}
+
+.header-purpose__menu a {
+  padding: 0.5rem 1rem;
+  color: var(--color-text);
+  text-decoration: none;
+  font-size: 0.875rem;
+}
+
+.header-purpose__menu a:hover {
+  background: var(--color-surface);
+  color: var(--color-accent);
+}
+
+/* チュートリアル（新規登録後の案内） */
+.tutorial {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+}
+
+.tutorial__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.4);
+}
+
+.tutorial__dialog {
+  position: relative;
+  width: 100%;
+  max-width: 32rem;
+  padding: 2rem;
+  background: #ffffff;
+  border: 1px solid var(--color-border);
+}
+
+.tutorial__dialog:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.tutorial__progress {
+  margin: 0 0 0.5rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  color: var(--color-muted);
+}
+
+.tutorial__dialog h2 {
+  margin: 0 0 1rem;
+  font-size: 1.25rem;
+  color: var(--color-accent);
+}
+
+.tutorial__body {
+  margin: 0 0 2rem;
+  line-height: 1.8;
+  color: var(--color-text);
+}
+
+.tutorial__actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.tutorial__nav {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.tutorial__actions button {
+  min-height: 2.5rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--color-border);
+  background: #ffffff;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.tutorial__actions button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.tutorial__skip {
+  border-color: transparent !important;
+  color: var(--color-muted) !important;
+}
+
+.tutorial__primary {
+  background: var(--color-accent) !important;
+  border-color: var(--color-accent) !important;
+  color: #ffffff !important;
+}
+
+/* マイページ：チュートリアルの設定 */
+.tutorial-setting {
+  margin-block-start: 2.5rem;
+  padding-block-start: 1.5rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.tutorial-setting h2 {
+  margin: 0 0 1rem;
+  font-size: 1.125rem;
+}
+
+.tutorial-setting__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.tutorial-setting__note {
+  margin: 0.5rem 0 0;
+  font-size: 0.875rem;
+  color: var(--color-muted);
+}
+
+/* ニュース本文（マークダウン） */
+.news-body {
+  line-height: 1.9;
+}
+
+.news-body > * + * {
+  margin-block-start: 1em;
+}
+
+.news-body h2 {
+  margin-block-start: 2em;
+  font-size: 1.25rem;
+  color: var(--color-accent);
+}
+
+.news-body h3 {
+  font-size: 1.0625rem;
+}
+
+.news-body ul,
+.news-body ol {
+  padding-inline-start: 1.5em;
+}
+
+.news-body a {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.news-body img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--color-border);
+/* マイページ：チュートリアルの達成状況 */
+.tutorial-setting__progress {
+  margin: 1.5rem 0 0.5rem;
+  font-weight: 600;
+  color: var(--color-accent);
+}
+
+.tutorial-setting__steps {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tutorial-setting__steps li {
+  display: grid;
+  grid-template-columns: 1.5rem minmax(0, 1fr);
+  align-items: baseline;
+  color: var(--color-muted);
+}
+
+.tutorial-setting__steps li.is-done {
+  color: var(--color-text);
+}
+
+.tutorial-setting__steps li.is-done > span:first-child {
+  color: var(--color-accent);
+}
+
+/* 画面には出さず、読み上げだけに使う文字 */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.tutorial-setting__complete {
+  margin: 0 0 1rem;
+  font-size: 0.9375rem;
+  color: var(--color-accent);
+}
+
+.tutorial-setting__badges {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+  gap: 0.75rem;
+  margin: 1rem 0 1.5rem;
+  padding: 0;
+  list-style: none;
+}
+
+.tutorial-setting__badges li {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.75rem 1rem;
+  border: 1px dashed var(--color-border);
+  color: var(--color-muted);
+}
+
+.tutorial-setting__badges li.is-unlocked {
+  border: 1px solid var(--color-accent);
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+.tutorial-setting__badge-name {
+  font-weight: 600;
+}
+
+.tutorial-setting__badge-desc {
+  font-size: 0.8125rem;
 }

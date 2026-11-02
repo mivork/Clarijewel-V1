@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
+import TutorialStep from "@/components/TutorialStep";
 
 export default function VerifyIndexPage() {
   const router = useRouter();
@@ -14,6 +15,8 @@ export default function VerifyIndexPage() {
   };
 
   return (
+  <>
+    <TutorialStep step="viewed_verify" />
     <div className="container" style={{ padding: "48px 24px", maxWidth: 480 }}>
       <h1 style={{ fontSize: "1.5rem", marginBottom: 16 }}>鑑定書 真贋照会</h1>
       <p style={{ color: "var(--color-muted)", marginBottom: 24 }}>
@@ -30,5 +33,6 @@ export default function VerifyIndexPage() {
         <button type="submit">照会する</button>
       </form>
     </div>
+  </>
   );
 }

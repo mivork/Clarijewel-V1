@@ -1,4 +1,5 @@
 import { verifyAppraisal } from "@/lib/api";
+import TutorialStep from "@/components/TutorialStep";
 
 export default async function VerifyPage({
   params,
@@ -9,6 +10,8 @@ export default async function VerifyPage({
   const result = await verifyAppraisal(serialNumber).catch(() => null);
 
   return (
+  <>
+    <TutorialStep step="viewed_verify" />
     <div className="container" style={{ padding: "48px 24px", maxWidth: 560 }}>
       <h1 style={{ fontSize: "1.5rem", marginBottom: 24 }}>鑑定書 真贋照会</h1>
 
@@ -37,5 +40,6 @@ export default async function VerifyPage({
         </div>
       )}
     </div>
+  </>
   );
 }

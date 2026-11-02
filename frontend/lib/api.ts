@@ -82,6 +82,8 @@ export type NewsArticle = {
   title: string;
   body: string;
   published_at: string | null;
+  is_important: boolean;
+  thumbnail_url: string | null;
 };
 
 export async function fetchNewsArticles(): Promise<NewsArticle[]> {
@@ -117,9 +119,11 @@ export type AuthUser = {
   is_admin: boolean;
   rank: UserRank;
   email_verified: boolean;
+  tutorial_enabled: boolean;
 };
 
 export type Profile = AuthUser & {
+  tutorial_progress: string[];
   birthday: string | null;
   anniversary_date: string | null;
   preferred_metal: string | null;
@@ -349,12 +353,16 @@ export type AdminNewsArticle = {
   title: string;
   body: string;
   published_at: string | null;
+  is_important: boolean;
+  thumbnail_url: string | null;
 };
 
 export type NewsArticleInput = {
   title: string;
   body: string;
   published_at?: string | null;
+  thumbnail_url?: string | null;
+  is_important?: boolean;
 };
 
 export async function fetchAdminNewsArticles(token: string): Promise<AdminNewsArticle[]> {
@@ -625,6 +633,7 @@ export async function updateProfile(
     anniversary_date?: string | null;
     preferred_metal?: string | null;
     preferred_size?: string | null;
+    tutorial_enabled?: boolean;
   }
 ): Promise<Profile> {
   const res = await fetch(`${API_BASE_URL}/profile`, {
@@ -1140,7 +1149,7 @@ export async function resendVerificationEmail(token: string): Promise<string> {
 
 export async function uploadAdminMedia(
   token: string,
-  type: "thumbnail" | "model_3d",
+  type: "thumbnail" | "model_3d" | "news_image",
   file: File
 ): Promise<{ path: string; url: string }> {
   const formData = new FormData();
@@ -1308,4 +1317,17 @@ export async function updateInquiryStatus(
   }
 
   return res.json();
+}
+
+// --- チュートリアル：達成した項目を記録（失敗しても画面は止めない） ---
+export async function recordTutorialStep(token: string, step: string): Promise<void> {
+  try {
+    await fetch(`${API_BASE_URL}/tutorial/progress`, {
+      method: "POST",
+      headers: { ...authHeaders(token), "Content-Type": "application/json" },
+      body: JSON.stringify({ step }),
+    });
+  } catch {
+    // 記録できなくても、ページの表示には影響させない
+  }
 }

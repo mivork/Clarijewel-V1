@@ -25,7 +25,7 @@ class AuthController extends Controller
 
         return response()->json([
             'user' => [
-                ...$user->only(['id', 'name', 'email', 'is_admin', 'rank']),
+                ...$user->only(['id', 'name', 'email', 'is_admin', 'rank', 'tutorial_enabled']),
                 'email_verified' => $user->hasVerifiedEmail(),
             ],
             'token' => $user->createToken('api')->plainTextToken,
@@ -51,7 +51,7 @@ class AuthController extends Controller
 
         return response()->json([
             'user' => [
-                ...$user->only(['id', 'name', 'email', 'is_admin', 'rank']),
+                ...$user->only(['id', 'name', 'email', 'is_admin', 'rank', 'tutorial_enabled']),
                 'email_verified' => $user->hasVerifiedEmail(),
             ],
             'token' => $user->createToken('api')->plainTextToken,
@@ -70,7 +70,7 @@ class AuthController extends Controller
         $user = $request->user();
 
         return response()->json([
-            ...$user->only(['id', 'name', 'email', 'is_admin', 'rank']),
+            ...$user->only(['id', 'name', 'email', 'is_admin', 'rank', 'tutorial_enabled']),
             'email_verified' => $user->hasVerifiedEmail(),
         ]);
     }
