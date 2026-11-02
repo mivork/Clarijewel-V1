@@ -1374,202 +1374,6 @@ button:disabled {
   }
 }
 
-/* --- トップページ（home）--- */
-.home-section {
-  padding-block: 3rem 0;
-}
-
-.home-promises {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
-  gap: 1.5rem;
-  padding-block: 2.5rem;
-  border-bottom: 1px solid var(--color-border);
-}
-
-.home-promises__item h3 {
-  margin: 0 0 0.5rem;
-  font-size: 1rem;
-  color: var(--color-accent);
-}
-
-.home-promises__item p {
-  margin: 0;
-  font-size: 0.9375rem;
-  line-height: 1.7;
-  color: var(--color-muted);
-}
-
-.home-item-categories {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
-  gap: 1rem;
-}
-
-.home-item-category {
-  display: grid;
-  gap: 0.5rem;
-  text-align: center;
-  font-size: 0.9375rem;
-  color: var(--color-text);
-  text-decoration: none;
-}
-
-.home-item-category:hover .placeholder-box {
-  border-color: var(--color-accent);
-}
-
-.home-more {
-  display: inline-block;
-  margin-block-start: 1.25rem;
-  color: var(--color-text);
-}
-
-.home-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.home-chip {
-  padding: 0.5rem 1rem;
-  border: 1px solid var(--color-border);
-  background: #ffffff;
-  color: var(--color-text);
-  font-size: 0.875rem;
-  text-decoration: none;
-}
-
-.home-chip:hover {
-  border-color: var(--color-accent);
-  color: var(--color-accent);
-}
-
-.home-steps {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
-  gap: 1.5rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.home-steps__item {
-  padding-block-start: 1rem;
-  border-top: 2px solid var(--color-accent);
-}
-
-.home-steps__no {
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
-  color: var(--color-muted);
-}
-
-.home-steps__item h3 {
-  margin: 0.5rem 0;
-  font-size: 1.0625rem;
-}
-
-.home-steps__item p {
-  margin: 0;
-  font-size: 0.9375rem;
-  line-height: 1.7;
-  color: var(--color-muted);
-}
-
-.home-cta {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1.5rem;
-  padding: 2rem;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-}
-
-.home-cta__title {
-  margin: 0 0 0.5rem;
-  font-size: 1.25rem;
-  color: var(--color-accent);
-}
-
-.home-cta__body {
-  margin: 0;
-  font-size: 0.9375rem;
-  color: var(--color-muted);
-}
-
-.home-cta__buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
-
-.home-cta__button {
-  min-height: 2.75rem;
-  display: inline-flex;
-  align-items: center;
-  padding: 0.5rem 1.5rem;
-  border: 1px solid var(--color-accent);
-  background: #ffffff;
-  color: var(--color-accent);
-  text-decoration: none;
-}
-
-.home-cta__button--primary {
-  background: var(--color-accent);
-  color: #ffffff;
-}
-
-.home-cta__button:hover {
-  background: var(--color-text);
-  border-color: var(--color-text);
-  color: #ffffff;
-}
-
-.home-news {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.home-news__item {
-  border-bottom: 1px solid var(--color-border);
-}
-
-.home-news__item a {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  align-items: baseline;
-  padding-block: 0.75rem;
-  text-decoration: none;
-}
-
-.home-news__item a:hover span:last-child {
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
-}
-
-.home-news__date {
-  font-size: 0.875rem;
-  color: var(--color-muted);
-}
-
-@media (max-width: 40rem) {
-  .home-section {
-    padding-block: 2rem 0;
-  }
-
-  .home-promises {
-    padding-block: 1.5rem;
-  }
-
-  .home-cta {
-    padding: 1.25rem;
-  }
-}
 /* トップの商品カルーセル。左端から商品を並べ、右側に次の商品を見せる。端までいったらループする
    幅は var(--product-slide-width)、間隔は var(--product-gap) で調整する */
 .product-carousel-section {
@@ -1702,33 +1506,358 @@ button:disabled {
 }
 
 
-/* 特集（Pick up）と誕生石：画像は枠のまま */
-.home-pickup {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
-  gap: 1.5rem;
+/* --- トップページ（導線の中心）--- */
+.home-section {
+  padding-block: 4rem 0;
 }
 
-.home-pickup__item {
+.home-heading {
+  margin: 0 0 1.5rem;
+  font-size: 1.375rem;
+  letter-spacing: 0.06em;
+  color: var(--color-accent);
+}
+
+/* お知らせ：ヒーローの直下。先頭の1件だけ大きく見せる */
+.home-news {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  gap: 1.5rem 3rem;
+  padding-block: 3rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.home-news__head {
+  display: grid;
+  align-content: start;
+  gap: 0.75rem;
+}
+
+.home-news__head h2 {
+  margin: 0;
+  font-size: 1.75rem;
+  letter-spacing: 0.06em;
+  color: var(--color-accent);
+}
+
+.home-news__all {
+  color: var(--color-text);
+}
+
+.home-news__lead {
+  display: grid;
+  gap: 0.5rem;
+  padding-block-end: 1rem;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 1.25rem;
+  line-height: 1.6;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.home-news__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.home-news__list li {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.home-news__list a {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+  align-items: baseline;
+  padding-block: 0.75rem;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.home-news__list a:hover span:last-child,
+.home-news__lead:hover span:last-child {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.home-news__date {
+  font-size: 0.875rem;
+  color: var(--color-muted);
+}
+
+/* 商品カテゴリー：大・中・小の枠を組み合わせ、同じ大きさが続かないようにする */
+.home-mosaic {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.home-tile {
   display: grid;
   gap: 0.75rem;
   color: var(--color-text);
   text-decoration: none;
 }
 
-.home-pickup__item h3 {
-  margin: 0;
+.home-tile:hover .placeholder-box {
+  border-color: var(--color-accent);
+}
+
+.home-tile__label {
   font-size: 1rem;
 }
 
-.home-pickup__item p {
+.home-tile--large {
+  grid-column: span 6;
+}
+
+.home-tile--large .placeholder-box {
+  aspect-ratio: 4 / 5;
+}
+
+.home-tile--large .home-tile__label {
+  font-size: 1.375rem;
+  letter-spacing: 0.06em;
+}
+
+.home-tile--square {
+  grid-column: span 3;
+}
+
+.home-tile--square .placeholder-box {
+  aspect-ratio: 1 / 1;
+}
+
+.home-tile--tall {
+  grid-column: span 3;
+}
+
+.home-tile--tall .placeholder-box {
+  aspect-ratio: 3 / 4;
+}
+
+.home-tile--wide {
+  grid-column: span 4;
+}
+
+.home-tile--wide .placeholder-box {
+  aspect-ratio: 16 / 10;
+}
+
+/* 相談・店舗の導線：文字を主役に、背景は面で区切る */
+.home-visit {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1.5rem 2.5rem;
+  margin-block-start: 4rem;
+  padding: 2.5rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+
+.home-visit h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.25rem;
+  color: var(--color-accent);
+}
+
+.home-visit p {
   margin: 0;
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   color: var(--color-muted);
 }
 
-.home-birthstones {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
-  gap: 0.5rem;
+.home-visit__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
 }
+
+.home-visit__link {
+  min-height: 2.75rem;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1.25rem;
+  border: 1px solid var(--color-accent);
+  background: #ffffff;
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+.home-visit__link--primary {
+  background: var(--color-accent);
+  color: #ffffff;
+}
+
+.home-visit__link:hover {
+  background: var(--color-text);
+  border-color: var(--color-text);
+  color: #ffffff;
+}
+
+/* 補助の導線：文字だけで、主張を抑える */
+.home-guide {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.5rem 1.5rem;
+  padding-block: 2rem 3rem;
+  font-size: 0.875rem;
+}
+
+.home-guide a {
+  color: var(--color-muted);
+}
+
+/* 店舗ページ：店舗ごとに大きさと配置を変える */
+.stores-page {
+  padding-block: 3rem 4rem;
+}
+
+.stores-page__header {
+  max-width: 40rem;
+  margin-block-end: 3rem;
+}
+
+.stores-page__header h1 {
+  margin: 0 0 1rem;
+  font-size: 1.75rem;
+  letter-spacing: 0.06em;
+  color: var(--color-accent);
+}
+
+.stores-page__header p {
+  margin: 0;
+  color: var(--color-muted);
+  line-height: 1.8;
+}
+
+.stores-page__store {
+  display: grid;
+  gap: 2rem 3rem;
+  align-items: center;
+  padding-block: 3rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.stores-page__store .placeholder-box {
+  aspect-ratio: 4 / 3;
+}
+
+.stores-page__store--feature {
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+}
+
+.stores-page__store--feature .placeholder-box {
+  aspect-ratio: 16 / 10;
+}
+
+.stores-page__store--square {
+  grid-template-columns: minmax(0, 4fr) minmax(0, 6fr);
+}
+
+.stores-page__store--square .placeholder-box {
+  aspect-ratio: 1 / 1;
+}
+
+.stores-page__store--tall {
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+}
+
+.stores-page__store--tall .placeholder-box {
+  aspect-ratio: 3 / 4;
+}
+
+.stores-page__store--wide {
+  grid-template-columns: minmax(0, 6fr) minmax(0, 4fr);
+}
+
+.stores-page__store--wide .placeholder-box {
+  aspect-ratio: 4 / 3;
+}
+
+.stores-page__store--wide .stores-page__body {
+  order: -1;
+}
+
+.stores-page__body h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.5rem;
+  color: var(--color-accent);
+}
+
+.stores-page__lead {
+  margin: 0 0 1.5rem;
+  color: var(--color-muted);
+  line-height: 1.8;
+}
+
+.stores-page__body dl {
+  display: grid;
+  grid-template-columns: 6rem minmax(0, 1fr);
+  gap: 0.75rem 1rem;
+  margin: 0 0 1.5rem;
+  font-size: 0.9375rem;
+}
+
+.stores-page__body dt {
+  color: var(--color-muted);
+}
+
+.stores-page__body dd {
+  margin: 0;
+}
+
+.stores-page__body ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stores-page__reserve {
+  color: var(--color-accent);
+  text-underline-offset: 0.2em;
+}
+
+@media (max-width: 40rem) {
+  .home-section {
+    padding-block: 2.5rem 0;
+  }
+
+  .home-news {
+    grid-template-columns: minmax(0, 1fr);
+    padding-block: 2rem;
+  }
+
+  .home-tile--large,
+  .home-tile--square,
+  .home-tile--tall,
+  .home-tile--wide {
+    grid-column: span 6;
+  }
+
+  .home-tile--large {
+    grid-column: span 12;
+  }
+
+  .home-visit {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 1.5rem;
+  }
+
+  .stores-page__store,
+  .stores-page__store--feature,
+  .stores-page__store--square,
+  .stores-page__store--tall,
+  .stores-page__store--wide {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .stores-page__store--wide .stores-page__body {
+    order: 0;
+  }
+}
+

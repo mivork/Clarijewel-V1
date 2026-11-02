@@ -3,7 +3,6 @@ import ProductGrid from "@/components/ProductGrid";
 import ProductSearchForm from "@/components/ProductSearchForm";
 import HeroCarousel from "@/components/HeroCarousel";
 import ProductCarousel from "@/components/ProductCarousel";
-import { GEM_TYPES } from "@/lib/constants";
 
 // リング専用ページ（/rings）で個別に紹介するアイテムは、ホームの一覧からは除外する
 const HOME_EXCLUDED_SKUS = ["CLJ-PDIA-001", "CLJ-AMY-001"];
@@ -38,103 +37,14 @@ const HERO_SLIDES = [
   },
 ];
 
-// 商品カテゴリー（各ページの URL に対応）
-const ITEM_CATEGORIES = [
-  { label: "リング", href: "/rings" },
-  { label: "ネックレス", href: "/necklaces" },
-  { label: "ピアス", href: "/earrings" },
-  { label: "イヤーカフ", href: "/ear-cuffs" },
-  { label: "ブレスレット", href: "/bracelets" },
-  { label: "ルース（裸石）", href: "/loose-stones" },
-];
-
-// 特集（Pick up）。リンク先は実装済みのページ
-const PICKUP_ITEMS = [
-  {
-    title: "ご購入ガイド",
-    body: "お支払い・お届け・返品について",
-    href: "/guide",
-  },
-  {
-    title: "店舗で相談する",
-    body: "完全予約制のサロンで、ご相談を承ります",
-    href: "/reserve/visit",
-  },
-  {
-    title: "会員特典",
-    body: "会員登録で、お買い物に使えるクーポンをプレゼント",
-    href: "/register",
-  },
-];
-
-// 誕生石（月ごと）。birthstone_month で商品を絞り込む
-const BIRTHSTONES = [
-  { month: 1, name: "ガーネット" },
-  { month: 2, name: "アメジスト" },
-  { month: 3, name: "アクアマリン" },
-  { month: 4, name: "ダイヤモンド" },
-  { month: 5, name: "エメラルド" },
-  { month: 6, name: "真珠" },
-  { month: 7, name: "ルビー" },
-  { month: 8, name: "ペリドット" },
-  { month: 9, name: "サファイア" },
-  { month: 10, name: "オパール" },
-  { month: 11, name: "トパーズ" },
-  { month: 12, name: "タンザナイト" },
-];
-
-// 「Clarijewel の約束」。実装済みの機能（鑑定書・真贋照会・マイページ）に基づく
-const PROMISES = [
-  {
-    title: "鑑定書付き",
-    body: "鑑定書付きの商品を扱っています。鑑定書はマイページからPDFで受け取れます。",
-  },
-  {
-    title: "真贋照会",
-    body: "鑑定書番号を入力すると、商品の情報をいつでも確認できます。",
-  },
-  {
-    title: "購入後も安心",
-    body: "購入履歴・保証・アフターケアの申し込みを、マイページでまとめて確認できます。",
-  },
-];
-
-const PURCHASE_STEPS = [
-  {
-    title: "商品を選ぶ",
-    body: "気に入った商品をカートに入れます。お気に入り登録もできます。",
-  },
-  {
-    title: "お支払い",
-    body: "クレジットカード、コンビニ払い、PayPayに対応しています。",
-  },
-  {
-    title: "鑑定書を受け取る",
-    body: "ご購入後、マイページから鑑定書をダウンロードできます。",
-  },
-];
-
-const STORES = [
-  {
-    name: "銀座本店",
-    address: "東京都中央区銀座",
-    hours: "11:00 - 20:00（完全予約制）",
-  },
-  {
-    name: "横浜サロン",
-    address: "神奈川県横浜市西区みなとみらい",
-    hours: "11:00 - 19:00（完全予約制）",
-  },
-  {
-    name: "名古屋サロン",
-    address: "愛知県名古屋市中区栄",
-    hours: "11:00 - 19:00（完全予約制）",
-  },
-  {
-    name: "大阪心斎橋サロン",
-    address: "大阪府大阪市中央区心斎橋筋",
-    hours: "11:00 - 20:00（完全予約制）",
-  },
+// 商品カテゴリー。大きさ（size）を変えて、並びに強弱をつける
+const ITEM_TILES = [
+  { label: "リング", href: "/rings", size: "large" },
+  { label: "ネックレス", href: "/necklaces", size: "square" },
+  { label: "ピアス", href: "/earrings", size: "tall" },
+  { label: "イヤーカフ", href: "/ear-cuffs", size: "wide" },
+  { label: "ブレスレット", href: "/bracelets", size: "square" },
+  { label: "ルース（裸石）", href: "/loose-stones", size: "wide" },
 ];
 
 export default async function HomePage({
@@ -196,7 +106,7 @@ export default async function HomePage({
   const homeProducts: Product[] = products.filter(
     (p) => !HOME_EXCLUDED_SKUS.includes(p.sku ?? "")
   );
-  const newArrivals = [...homeProducts].sort((a, b) => b.id - a.id).slice(0, 8);
+  const [latestNews, ...olderNews] = newsArticles.slice(0, 4);
 
   return (
     <div>
@@ -207,150 +117,25 @@ export default async function HomePage({
       </section>
 
       <div className="container">
-        <section className="home-promises" aria-labelledby="home-promises-title">
-          <h2 id="home-promises-title" className="visually-hidden">
-            Clarijewel の約束
-          </h2>
-          {PROMISES.map((promise) => (
-            <div key={promise.title} className="home-promises__item">
-              <h3>{promise.title}</h3>
-              <p>{promise.body}</p>
-            </div>
-          ))}
-        </section>
-
-        <section id="categories" className="home-section">
-          <h2 className="section-title">商品カテゴリー</h2>
-          <div className="home-item-categories">
-            {ITEM_CATEGORIES.map((category) => (
-              <a key={category.href} href={category.href} className="home-item-category">
-                <div className="placeholder-box" aria-hidden="true" />
-                <span>{category.label}</span>
-              </a>
-            ))}
-          </div>
-        </section>
-
-        {homeProducts.length > 0 && (
-          <section id="recommended" className="home-section">
-            <h2 className="section-title">今月のおすすめ</h2>
-            <ProductCarousel products={homeProducts} />
-          </section>
-        )}
-
-        {newArrivals.length > 0 && (
-          <section id="new-arrivals" className="home-section">
-            <h2 className="section-title">新着商品</h2>
-            <ProductCarousel products={newArrivals} />
-          </section>
-        )}
-
-        <section id="pickup" className="home-section">
-          <h2 className="section-title">特集</h2>
-          <div className="home-pickup">
-            {PICKUP_ITEMS.map((item) => (
-              <a key={item.href} href={item.href} className="home-pickup__item">
-                <div className="placeholder-box" aria-hidden="true" />
-                <h3>{item.title}</h3>
-                <p>{item.body}</p>
-              </a>
-            ))}
-          </div>
-        </section>
-
-        <section id="birthstone" className="home-section">
-          <h2 className="section-title">誕生石から探す</h2>
-          <div className="home-birthstones">
-            {BIRTHSTONES.map((stone) => (
-              <a
-                key={stone.month}
-                href={`/?birthstone_month=${stone.month}`}
-                className="home-chip"
-              >
-                {stone.month}月 {stone.name}
-              </a>
-            ))}
-          </div>
-        </section>
-
-        <section id="gems" className="home-section">
-          <h2 className="section-title">宝石から探す</h2>
-          <div className="home-chips">
-            {GEM_TYPES.map((gemType) => (
-              <a
-                key={gemType}
-                href={`/?gem_type=${encodeURIComponent(gemType)}`}
-                className="home-chip"
-              >
-                {gemType}
-              </a>
-            ))}
-          </div>
-        </section>
-
-        <section id="search" className="home-section">
-          <h2 className="section-title">絞り込み検索</h2>
-          <ProductSearchForm />
-        </section>
-
-        {products.length === 0 && (
-          <p style={{ color: "var(--color-muted)", padding: "24px 0" }}>
-            現在表示できる商品がありません（APIサーバーが起動しているか確認してください）。
-          </p>
-        )}
-
-        <section id="purchase" className="home-section">
-          <h2 className="section-title">ご購入の流れ</h2>
-          <ol className="home-steps">
-            {PURCHASE_STEPS.map((step, i) => (
-              <li key={step.title} className="home-steps__item">
-                <span className="home-steps__no">STEP {i + 1}</span>
-                <h3>{step.title}</h3>
-                <p>{step.body}</p>
-              </li>
-            ))}
-          </ol>
-        </section>
-
-        <section id="consult" className="home-section">
-          <div className="home-cta">
-            <div>
-              <h2 className="home-cta__title">店舗でじっくりご相談ください</h2>
-              <p className="home-cta__body">
-                完全予約制のサロンで、宝石の見方や商品のご相談ができます。
-              </p>
-            </div>
-            <div className="home-cta__buttons">
-              <a href="/reserve/visit" className="home-cta__button home-cta__button--primary">
-                来店予約
-              </a>
-              <a href="/reserve/online" className="home-cta__button">
-                オンライン相談
+        {latestNews && (
+          <section id="news" className="home-news" aria-labelledby="home-news-title">
+            <div className="home-news__head">
+              <h2 id="home-news-title">お知らせ</h2>
+              <a href="/news" className="home-news__all">
+                一覧を見る →
               </a>
             </div>
-          </div>
-        </section>
-
-        <section id="stores" className="home-section">
-          <h2 className="section-title">店舗情報</h2>
-          <div className="store-grid">
-            {STORES.map((store) => (
-              <div key={store.name} className="store-card">
-                <div className="placeholder-box" aria-hidden="true" />
-                <h3>{store.name}</h3>
-                <p>{store.address}</p>
-                <p>営業時間: {store.hours}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {newsArticles.length > 0 && (
-          <section id="news" className="home-section">
-            <h2 className="section-title">新着ニュース</h2>
-            <ul className="home-news">
-              {newsArticles.slice(0, 3).map((article) => (
-                <li key={article.id} className="home-news__item">
+            <a href={`/news/${latestNews.id}`} className="home-news__lead">
+              {latestNews.published_at && (
+                <span className="home-news__date">
+                  {new Date(latestNews.published_at).toLocaleDateString("ja-JP")}
+                </span>
+              )}
+              <span>{latestNews.title}</span>
+            </a>
+            <ul className="home-news__list">
+              {olderNews.slice(0, 2).map((article) => (
+                <li key={article.id}>
                   <a href={`/news/${article.id}`}>
                     {article.published_at && (
                       <span className="home-news__date">
@@ -362,11 +147,75 @@ export default async function HomePage({
                 </li>
               ))}
             </ul>
-            <a href="/news" className="home-more">
-              ニュース一覧を見る →
-            </a>
           </section>
         )}
+
+        <section id="categories" className="home-section" aria-labelledby="home-categories-title">
+          <h2 id="home-categories-title" className="home-heading">
+            商品を探す
+          </h2>
+          <div className="home-mosaic">
+            {ITEM_TILES.map((tile) => (
+              <a
+                key={tile.href}
+                href={tile.href}
+                className={`home-tile home-tile--${tile.size}`}
+              >
+                <div className="placeholder-box" aria-hidden="true" />
+                <span className="home-tile__label">{tile.label}</span>
+              </a>
+            ))}
+          </div>
+        </section>
+
+        {homeProducts.length > 0 && (
+          <section id="recommended" className="home-section" aria-labelledby="home-recommended-title">
+            <div className="home-heading-row">
+              <h2 id="home-recommended-title" className="home-heading">
+                今月のおすすめ
+              </h2>
+            </div>
+            <ProductCarousel products={homeProducts} />
+          </section>
+        )}
+
+        <section id="search" className="home-section" aria-labelledby="home-search-title">
+          <h2 id="home-search-title" className="home-heading">
+            条件から探す
+          </h2>
+          <ProductSearchForm />
+        </section>
+
+        {products.length === 0 && (
+          <p style={{ color: "var(--color-muted)", padding: "24px 0" }}>
+            現在表示できる商品がありません（APIサーバーが起動しているか確認してください）。
+          </p>
+        )}
+
+        <section id="visit" className="home-visit" aria-labelledby="home-visit-title">
+          <div className="home-visit__text">
+            <h2 id="home-visit-title">店舗でじっくりご相談ください</h2>
+            <p>完全予約制のサロンで、宝石の見方や商品のご相談を承ります。</p>
+          </div>
+          <div className="home-visit__links">
+            <a href="/stores" className="home-visit__link home-visit__link--primary">
+              店舗のご案内
+            </a>
+            <a href="/reserve/visit" className="home-visit__link">
+              来店予約
+            </a>
+            <a href="/reserve/online" className="home-visit__link">
+              オンライン相談
+            </a>
+          </div>
+        </section>
+
+        <nav className="home-guide" aria-label="ご案内">
+          <a href="/guide">ご購入ガイド</a>
+          <a href="/verify">鑑定書の真贋照会</a>
+          <a href="/register">会員登録</a>
+          <a href="/company">会社概要</a>
+        </nav>
       </div>
     </div>
   );
