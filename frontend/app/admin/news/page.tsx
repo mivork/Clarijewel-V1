@@ -2,6 +2,7 @@
 
 import { useEffect, useState, type FormEvent } from "react";
 import { useAuth } from "@/lib/AuthContext";
+import NewsBody from "@/components/NewsBody";
 import {
   fetchAdminNewsArticles,
   createAdminNewsArticle,
@@ -259,6 +260,14 @@ function AdminNewsContent() {
           />
         </label>
 
+        {form.body && (
+          <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+            <span style={{ color: "var(--color-muted)", fontSize: "0.85rem" }}>プレビュー（公開ページの表示と同じ）</span>
+            <div style={{ border: "1px solid var(--color-border)", padding: 16, background: "#ffffff" }}>
+              <NewsBody body={form.body} />
+            </div>
+          </div>
+        )}
         <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
           <span>本文に画像を挿入（マークダウン：見出しは「## 見出し」、リストは「- 項目」、リンクは「[文字](URL)」）</span>
           <input
