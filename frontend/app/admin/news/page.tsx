@@ -7,6 +7,7 @@ import {
   createAdminNewsArticle,
   updateAdminNewsArticle,
   deleteAdminNewsArticle,
+  uploadAdminMedia,
   type AdminNewsArticle,
   type NewsArticleInput,
 } from "@/lib/api";
@@ -15,6 +16,7 @@ const emptyForm: NewsArticleInput = {
   title: "",
   body: "",
   published_at: "",
+  thumbnail_url: "",
 };
 
 // datetime-local入力用に "YYYY-MM-DDTHH:mm" 形式へ変換
@@ -54,6 +56,7 @@ function AdminNewsContent() {
       title: article.title,
       body: article.body,
       published_at: toDatetimeLocal(article.published_at),
+      thumbnail_url: article.thumbnail_url ?? "",
     });
   };
 
@@ -72,6 +75,7 @@ function AdminNewsContent() {
       const input: NewsArticleInput = {
         ...form,
         published_at: form.published_at ? form.published_at : null,
+        thumbnail_url: form.thumbnail_url ? form.thumbnail_url : null,
       };
 
       if (editingId) {
@@ -87,6 +91,34 @@ function AdminNewsContent() {
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  // 管理者が画像をアップロードし、URLを返す（サムネイル用・本文挿入用）
+  const uploadImage = async (file: File): Promise<string | null> => {
+    if (!token) return null;
+    try {
+      const { url } = await uploadAdminMedia(token, "news_image", file);
+      return url;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "画像のアップロードに失敗しました");
+      return null;
+    }
+  };
+
+  const handleThumbnailFile = async (file: File) => {
+    const url = await uploadImage(file);
+    if (url) setForm((prev) => ({ ...prev, thumbnail_url: url }));
+  };
+
+  // 本文の末尾に、マークダウンの画像記法を挿入する
+  const handleBodyImageFile = async (file: File) => {
+    const url = await uploadImage(file);
+    if (!url) return;
+    const alt = file.name.replace(/\.[^.]+$/, "");
+    setForm((prev) => {
+      const separator = prev.body && !prev.body.endsWith("\n") ? "\n" : "";
+      return { ...prev, body: prev.body + separator + "\n![" + alt + "](" + url + ")\n" };
+    });
   };
 
   const handleDelete = async (id: number) => {
@@ -166,6 +198,30 @@ function AdminNewsContent() {
           />
         </label>
         <label style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+          サムネイル（一覧・詳細の上に表示。未設定なら表示しません）
+          <input
+            type="url"
+            placeholder="https://..."
+            value={form.thumbnail_url ?? ""}
+            onChange={(e) => setForm({ ...form, thumbnail_url: e.target.value })}
+          />
+          <input
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) handleThumbnailFile(file);
+            }}
+          />
+          {form.thumbnail_url && (
+            <img
+              src={form.thumbnail_url}
+              alt="サムネイルのプレビュー"
+              style={{ maxWidth: 240, border: "1px solid var(--color-border)" }}
+            />
+          )}
+        </label>
+        <label style={{ display: "flex", flexDirection: "column", gap: 4 }}>
           本文
           <textarea
             rows={6}
@@ -181,6 +237,19 @@ function AdminNewsContent() {
             }}
           />
         </label>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+          <span>本文に画像を挿入（マークダウン：見出しは「## 見出し」、リストは「- 項目」、リンクは「[文字](URL)」）</span>
+          <input
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) handleBodyImageFile(file);
+              e.target.value = "";
+            }}
+          />
+        </div>
 
         {error && <p style={{ color: "var(--color-danger)" }}>{error}</p>}
 

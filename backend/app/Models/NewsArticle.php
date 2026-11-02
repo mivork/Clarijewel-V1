@@ -14,6 +14,7 @@ class NewsArticle extends Model
         'body',
         'published_at',
         'is_important',
+        'thumbnail_url',
     ];
 
     protected function casts(): array

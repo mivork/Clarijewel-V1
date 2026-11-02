@@ -15,18 +15,24 @@ class MediaController extends Controller
     public function upload(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'type' => ['required', 'in:thumbnail,model_3d'],
+            'type' => ['required', 'in:thumbnail,model_3d,news_image'],
             'file' => [
                 'required',
                 'file',
-                $request->input('type') === 'thumbnail'
-                    ? 'mimes:jpg,jpeg,png,webp'
-                    : 'mimes:glb,gltf',
-                'max:20480', // 20MB
+                match ($request->input('type')) {
+                    'thumbnail' => 'mimes:jpg,jpeg,png,webp',
+                    'news_image' => 'mimes:jpg,jpeg,png,webp',
+                    default => 'mimes:glb,gltf',
+                },
+                $request->input('type') === 'news_image' ? 'max:5120' : 'max:20480',
             ],
         ]);
 
-        $directory = $validated['type'] === 'thumbnail' ? 'products/thumbnails' : 'products/models';
+        $directory = match ($validated['type']) {
+            'thumbnail' => 'products/thumbnails',
+            'news_image' => 'news/images',
+            default => 'products/models',
+        };
         $path = $request->file('file')->store($directory, 'public');
 
         return response()->json([

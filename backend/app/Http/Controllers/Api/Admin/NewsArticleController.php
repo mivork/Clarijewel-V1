@@ -41,6 +41,8 @@ class NewsArticleController extends Controller
             'title' => ['required', 'string', 'max:255'],
             'body' => ['required', 'string'],
             'published_at' => ['nullable', 'date'],
+            'is_important' => ['sometimes', 'boolean'],
+            'thumbnail_url' => ['nullable', 'url', 'max:2048'],
         ]);
     }
 }

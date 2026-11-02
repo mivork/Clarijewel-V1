@@ -83,6 +83,7 @@ export type NewsArticle = {
   body: string;
   published_at: string | null;
   is_important: boolean;
+  thumbnail_url: string | null;
 };
 
 export async function fetchNewsArticles(): Promise<NewsArticle[]> {
@@ -351,12 +352,15 @@ export type AdminNewsArticle = {
   title: string;
   body: string;
   published_at: string | null;
+  is_important: boolean;
+  thumbnail_url: string | null;
 };
 
 export type NewsArticleInput = {
   title: string;
   body: string;
   published_at?: string | null;
+  thumbnail_url?: string | null;
 };
 
 export async function fetchAdminNewsArticles(token: string): Promise<AdminNewsArticle[]> {
@@ -1143,7 +1147,7 @@ export async function resendVerificationEmail(token: string): Promise<string> {
 
 export async function uploadAdminMedia(
   token: string,
-  type: "thumbnail" | "model_3d",
+  type: "thumbnail" | "model_3d" | "news_image",
   file: File
 ): Promise<{ path: string; url: string }> {
   const formData = new FormData();

@@ -22,6 +22,13 @@ export default async function NewsDetailPage({
         </p>
       )}
       <h1 style={{ fontSize: "1.6rem", marginTop: 8 }}>{article.title}</h1>
+      {article.thumbnail_url && (
+        <img
+          src={article.thumbnail_url}
+          alt={article.title}
+          style={{ display: "block", width: "100%", height: "auto", margin: "24px 0", border: "1px solid var(--color-border)" }}
+        />
+      )}
       <NewsBody body={article.body} />
 
       <a href="/news" style={{ display: "inline-block", marginTop: 24 }}>
