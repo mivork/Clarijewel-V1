@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { fetchNewsArticle } from "@/lib/api";
 import NewsBody from "@/components/NewsBody";
 import TutorialStep from "@/components/TutorialStep";
+import Link from "next/link";
 
 export default async function NewsDetailPage({
   params,
@@ -34,9 +35,9 @@ export default async function NewsDetailPage({
       )}
       <NewsBody body={article.body} />
 
-      <a href="/news" style={{ display: "inline-block", marginTop: 24 }}>
+      <Link href="/news" style={{ display: "inline-block", marginTop: 24 }}>
         ← ニュース一覧に戻る
-      </a>
+      </Link>
     </div>
   </>
   );

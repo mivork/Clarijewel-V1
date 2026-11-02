@@ -6,6 +6,7 @@ import { useAuth } from "@/lib/AuthContext";
 import { useCart } from "@/lib/CartContext";
 import { logout as logoutRequest } from "@/lib/api";
 import { ITEM_TYPES, ITEM_TYPE_PATHS } from "@/lib/constants";
+import Link from "next/link";
 
 function HomeIcon() {
   return (
@@ -107,22 +108,22 @@ export default function Header() {
           zornix株式会社 直営オンラインストア　|　透明性と信頼を届けるジュエリーブランド
         </span>
         <nav className="utility-links">
-          <a href="/mypage#consultation">オンライン・実店舗相談</a>
-          <a href="/guide">ご購入ガイド</a>
+          <Link href="/mypage#consultation">オンライン・実店舗相談</Link>
+          <Link href="/guide">ご購入ガイド</Link>
         </nav>
       </div>
 
       <div className="container header-main">
-        <a href="/" className="logo-block">
+        <Link href="/" className="logo-block">
           <span className="logo">CLARIJEWEL</span>
           <span className="logo-tagline">TRANSPARENT GEMSTONE &amp; FINE JEWELRY</span>
-        </a>
+        </Link>
 
         <form className="header-search" role="search" onSubmit={handleSearch}>
-          <a href="/#search" className="header-search-filter" title="条件指定">
+          <Link href="/#search" className="header-search-filter" title="条件指定">
             <FilterIcon />
             <span>条件指定</span>
-          </a>
+          </Link>
           <input
             type="text"
             name="q"
@@ -136,7 +137,7 @@ export default function Header() {
         </form>
 
         <nav className="header-actions">
-          <a
+          <Link
             href="/mypage#wishlist"
             className="header-icon-link"
             aria-label="お気に入り"
@@ -144,15 +145,15 @@ export default function Header() {
           >
             <HeartIcon />
             <span>お気に入り</span>
-          </a>
-          <a href="/cart" className="header-icon-link" aria-label="カート" title="カート">
+          </Link>
+          <Link href="/cart" className="header-icon-link" aria-label="カート" title="カート">
             <CartIcon />
             <span>カート</span>
             {items.length > 0 && (
               <span className="header-icon-badge">{items.length}</span>
             )}
-          </a>
-          <a
+          </Link>
+          <Link
             href="/mypage"
             className="header-icon-link"
             aria-label="マイページ"
@@ -160,7 +161,7 @@ export default function Header() {
           >
             <UserIcon />
             <span>マイページ</span>
-          </a>
+          </Link>
           {authReady && user && (
             <span className="header-account">
               <span className="header-account-name">{user.name} 様</span>
@@ -171,8 +172,8 @@ export default function Header() {
           )}
           {authReady && !user && (
             <span className="header-account">
-              <a href="/register">新規登録</a>
-              <a href="/login">ログイン</a>
+              <Link href="/register">新規登録</Link>
+              <Link href="/login">ログイン</Link>
             </span>
           )}
         </nav>
@@ -180,19 +181,19 @@ export default function Header() {
 
       <div className="container header-nav-row">
         <nav className="header-nav-primary">
-          <a href="/">
+          <Link href="/">
             <HomeIcon />
             ホーム
-          </a>
-          <a href="/#new-arrivals">新着アイテム</a>
-          <a href="/search">条件から探す</a>
+          </Link>
+          <Link href="/#new-arrivals">新着アイテム</Link>
+          <Link href="/search">条件から探す</Link>
           <details className="header-purpose">
             <summary>目的から探す</summary>
             <div className="header-purpose__menu">
-              <a href="/search">贈り物を探す</a>
-              <a href="/guide#aftercare">サイズ直し・お直し</a>
-              <a href="/verify">鑑定書を確認する</a>
-              <a href="/stores">店舗で相談する</a>
+              <Link href="/search">贈り物を探す</Link>
+              <Link href="/guide#aftercare">サイズ直し・お直し</Link>
+              <Link href="/verify">鑑定書を確認する</Link>
+              <Link href="/stores">店舗で相談する</Link>
             </div>
           </details>
         </nav>

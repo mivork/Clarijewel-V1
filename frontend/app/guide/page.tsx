@@ -17,6 +17,7 @@ const FAQ: [string, string][] = [
   ],
 ];
 import TutorialStep from "@/components/TutorialStep";
+import Link from "next/link";
 
 export default function GuidePage() {
   return (
@@ -25,7 +26,7 @@ export default function GuidePage() {
     <div className="container" style={{ padding: "48px 24px", maxWidth: 720 }}>
       <h1 style={{ fontSize: "1.5rem", marginBottom: 24 }}>GUIDE</h1>
       <p style={{ marginBottom: 32 }}>
-        <a href="/?tutorial=1">チュートリアルをもう一度見る</a>
+        <Link href="/?tutorial=1">チュートリアルをもう一度見る</Link>
       </p>
 
       <section id="shipping" style={{ marginBottom: 40 }}>
@@ -46,7 +47,7 @@ export default function GuidePage() {
         <p>
           当店で取り扱う商品は鑑定書付きの一点物のため、お客様都合による返品・交換は
           お受けしておりません。詳しくは
-          <a href="/legal/no-return"> 特定商取引法に基づく表記</a>
+          <Link href="/legal/no-return"> 特定商取引法に基づく表記</Link>
           をご確認ください。
         </p>
       </section>
@@ -55,7 +56,7 @@ export default function GuidePage() {
         <h2 style={{ fontSize: "1.2rem", marginBottom: 16 }}>アフターケア</h2>
         <p>
           保証期間中の無料クリーニング・サイズ直しのご依頼は
-          <a href="/mypage"> マイページ</a>
+          <Link href="/mypage"> マイページ</Link>
           からお申し込みいただけます。
         </p>
       </section>

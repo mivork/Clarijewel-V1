@@ -1,5 +1,6 @@
 import { fetchProducts, fetchNewsArticles, type Product } from "@/lib/api";
 import HeroCarousel from "@/components/HeroCarousel";
+import Link from "next/link";
 
 // リング専用ページ（/rings）で個別に紹介するアイテムは、ホームの一覧からは除外する
 const HOME_EXCLUDED_SKUS = ["CLJ-PDIA-001", "CLJ-AMY-001"];
@@ -77,7 +78,7 @@ function HomeProductGrid({ products }: { products: Product[] }) {
     <ul className="home-products">
       {products.map((product) => (
         <li key={product.id}>
-          <a href={`/products/${product.id}`} className="home-product">
+          <Link href={`/products/${product.id}`} className="home-product">
             <span className="placeholder-box" aria-hidden="true" />
             <span className="home-product__brand">CLARIJEWEL</span>
             <span className="home-product__name">{product.name}</span>
@@ -85,7 +86,7 @@ function HomeProductGrid({ products }: { products: Product[] }) {
               &yen;{product.price.toLocaleString()}
               <span className="home-product__tax">（税込）</span>
             </span>
-          </a>
+          </Link>
         </li>
       ))}
     </ul>
@@ -110,10 +111,10 @@ export default async function HomePage() {
   return (
     <div>
       {importantNotice && (
-        <a href={`/news/${importantNotice.id}`} className="home-notice">
+        <Link href={`/news/${importantNotice.id}`} className="home-notice">
           <span className="home-notice__label">重要</span>
           <span className="home-notice__title">{importantNotice.title}</span>
-        </a>
+        </Link>
       )}
 
       <section className="hero">
@@ -127,12 +128,12 @@ export default async function HomePage() {
           <section id="news" className="home-news" aria-labelledby="home-news-title">
             <div className="home-news__head">
               <h2 id="home-news-title">お知らせ</h2>
-              <a href="/news">すべてのお知らせ</a>
+              <Link href="/news">すべてのお知らせ</Link>
             </div>
             <ul className="home-news__list">
               {regularNews.slice(0, 3).map((article) => (
                 <li key={article.id}>
-                  <a href={`/news/${article.id}`}>
+                  <Link href={`/news/${article.id}`}>
                     <time className="home-news__date" dateTime={article.published_at ?? undefined}>
                       {formatDate(article.published_at)}
                     </time>
@@ -140,7 +141,7 @@ export default async function HomePage() {
                     <span className="home-news__arrow" aria-hidden="true">
                       →
                     </span>
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
