@@ -2039,8 +2039,10 @@ button:disabled {
 .home-notice__label {
   flex: 0 0 auto;
   padding: 0.125rem 0.5rem;
-  background: var(--color-accent);
-  color: #ffffff;
+  border: 1px solid var(--color-border);
+  background: #ffffff;
+  color: var(--color-text);
+  font-weight: 600;
   font-size: 0.75rem;
   letter-spacing: 0.06em;
 }
