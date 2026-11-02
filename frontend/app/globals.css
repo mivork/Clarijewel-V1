@@ -2319,3 +2319,9 @@ button:disabled {
   clip-path: inset(50%);
   white-space: nowrap;
 }
+
+.tutorial-setting__complete {
+  margin: 0 0 1rem;
+  font-size: 0.9375rem;
+  color: var(--color-accent);
+}

@@ -65,6 +65,11 @@ export default function TutorialSetting() {
       <p className="tutorial-setting__progress">
         達成 {achieved} / {STEP_LABELS.length}
       </p>
+      {achieved === STEP_LABELS.length && (
+        <p role="status" className="tutorial-setting__complete">
+          すべて達成しました。ご利用ありがとうございます。
+        </p>
+      )}
       <ul className="tutorial-setting__steps">
         {STEP_LABELS.map((step) => {
           const done = progress.includes(step.key);
