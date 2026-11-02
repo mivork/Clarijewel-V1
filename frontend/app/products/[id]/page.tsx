@@ -4,6 +4,7 @@ import ProductPurchaseForm from "@/components/ProductPurchaseForm";
 import ProductViewer from "@/components/ProductViewer";
 import ReviewSection from "@/components/ReviewSection";
 import AppraisalQRCode from "@/components/AppraisalQRCode";
+import TutorialStep from "@/components/TutorialStep";
 
 const BIRTHSTONE_MONTH_LABELS: Record<number, string> = {
   1: "1月", 2: "2月", 3: "3月", 4: "4月", 5: "5月", 6: "6月",
@@ -23,6 +24,8 @@ export default async function ProductDetailPage({
   }
 
   return (
+  <>
+    <TutorialStep step="viewed_product" />
     <div className="container" style={{ padding: "48px 24px" }}>
       <div
         style={{
@@ -100,5 +103,6 @@ export default async function ProductDetailPage({
 
       <ReviewSection productId={product.id} />
     </div>
+  </>
   );
 }

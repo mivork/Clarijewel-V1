@@ -16,9 +16,12 @@ const FAQ: [string, string][] = [
     "発送前の注文に限り、マイページの購入履歴から取り消しが可能です。発送後のキャンセル・返品は商品の性質上お受けしておりません。",
   ],
 ];
+import TutorialStep from "@/components/TutorialStep";
 
 export default function GuidePage() {
   return (
+  <>
+    <TutorialStep step="viewed_guide" />
     <div className="container" style={{ padding: "48px 24px", maxWidth: 720 }}>
       <h1 style={{ fontSize: "1.5rem", marginBottom: 24 }}>GUIDE</h1>
       <p style={{ marginBottom: 32 }}>
@@ -69,5 +72,6 @@ export default function GuidePage() {
         </div>
       </section>
     </div>
+  </>
   );
 }

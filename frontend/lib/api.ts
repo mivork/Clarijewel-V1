@@ -1312,3 +1312,16 @@ export async function updateInquiryStatus(
 
   return res.json();
 }
+
+// --- チュートリアル：達成した項目を記録（失敗しても画面は止めない） ---
+export async function recordTutorialStep(token: string, step: string): Promise<void> {
+  try {
+    await fetch(`${API_BASE_URL}/tutorial/progress`, {
+      method: "POST",
+      headers: { ...authHeaders(token), "Content-Type": "application/json" },
+      body: JSON.stringify({ step }),
+    });
+  } catch {
+    // 記録できなくても、ページの表示には影響させない
+  }
+}
