@@ -1506,53 +1506,44 @@ button:disabled {
 }
 
 
-/* --- トップページ（導線の中心）--- */
-.home-section {
-  padding-block: 4rem 0;
-}
-
+/* --- トップページ（分類ごとに見せ方を変える）--- */
 .home-heading {
   margin: 0 0 1.5rem;
-  font-size: 1.375rem;
-  letter-spacing: 0.06em;
-  color: var(--color-accent);
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--color-text);
 }
 
-/* お知らせ：ヒーローの直下。先頭の1件だけ大きく見せる */
-.home-news {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
-  gap: 1.5rem 3rem;
-  padding-block: 3rem;
-  border-bottom: 1px solid var(--color-border);
+.home-section,
+.home-news,
+.home-categories,
+.home-features,
+.home-visit {
+  padding-block: 3.5rem 0;
 }
 
+/* お知らせ：日付・見出し・矢印を列に揃えた一覧 */
 .home-news__head {
-  display: grid;
-  align-content: start;
-  gap: 0.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  margin-block-end: 0.5rem;
+  padding-block-end: 0.75rem;
+  border-bottom: 2px solid var(--color-accent);
 }
 
 .home-news__head h2 {
   margin: 0;
-  font-size: 1.75rem;
-  letter-spacing: 0.06em;
-  color: var(--color-accent);
-}
-
-.home-news__all {
-  color: var(--color-text);
-}
-
-.home-news__lead {
-  display: grid;
-  gap: 0.5rem;
-  padding-block-end: 1rem;
-  border-bottom: 1px solid var(--color-border);
   font-size: 1.25rem;
-  line-height: 1.6;
+  font-weight: 600;
   color: var(--color-text);
-  text-decoration: none;
+}
+
+.home-news__head a {
+  font-size: 0.875rem;
+  color: var(--color-muted);
 }
 
 .home-news__list {
@@ -1566,17 +1557,16 @@ button:disabled {
 }
 
 .home-news__list a {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.25rem 1rem;
+  display: grid;
+  grid-template-columns: 8rem minmax(0, 1fr) 1.5rem;
   align-items: baseline;
-  padding-block: 0.75rem;
+  gap: 1rem;
+  padding-block: 1rem;
   color: var(--color-text);
   text-decoration: none;
 }
 
-.home-news__list a:hover span:last-child,
-.home-news__lead:hover span:last-child {
+.home-news__list a:hover .home-news__title {
   text-decoration: underline;
   text-underline-offset: 0.2em;
 }
@@ -1584,133 +1574,306 @@ button:disabled {
 .home-news__date {
   font-size: 0.875rem;
   color: var(--color-muted);
+  font-variant-numeric: tabular-nums;
 }
 
-/* 商品カテゴリー：大・中・小の枠を組み合わせ、同じ大きさが続かないようにする */
-.home-mosaic {
+.home-news__title {
+  line-height: 1.6;
+}
+
+.home-news__arrow {
+  justify-self: end;
+  color: var(--color-muted);
+}
+
+/* 商品カテゴリー：3列×2段、すべて同じ 3:2 の枠（同じ分類は揃える） */
+.home-categories__grid {
   display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: 1.25rem;
-  align-items: start;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-.home-tile {
+.home-categories__item {
   display: grid;
   gap: 0.75rem;
   color: var(--color-text);
   text-decoration: none;
 }
 
-.home-tile:hover .placeholder-box {
+.home-categories__item .placeholder-box {
+  aspect-ratio: 3 / 2;
+}
+
+.home-categories__item:hover .placeholder-box {
   border-color: var(--color-accent);
 }
 
-.home-tile__label {
+.home-categories__label {
   font-size: 1rem;
 }
 
-.home-tile--large {
-  grid-column: span 6;
-}
-
-.home-tile--large .placeholder-box {
-  aspect-ratio: 4 / 5;
-}
-
-.home-tile--large .home-tile__label {
-  font-size: 1.375rem;
-  letter-spacing: 0.06em;
-}
-
-.home-tile--square {
-  grid-column: span 3;
-}
-
-.home-tile--square .placeholder-box {
-  aspect-ratio: 1 / 1;
-}
-
-.home-tile--tall {
-  grid-column: span 3;
-}
-
-.home-tile--tall .placeholder-box {
-  aspect-ratio: 3 / 4;
-}
-
-.home-tile--wide {
-  grid-column: span 4;
-}
-
-.home-tile--wide .placeholder-box {
-  aspect-ratio: 16 / 10;
-}
-
-/* 相談・店舗の導線：文字を主役に、背景は面で区切る */
-.home-visit {
+/* 特集：2列、16:9 の大きな枠（分類が違うので、大きさも商品カテゴリーとは変える） */
+.home-features__grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 1.5rem 2.5rem;
-  margin-block-start: 4rem;
-  padding: 2.5rem;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-}
-
-.home-visit h2 {
-  margin: 0 0 0.5rem;
-  font-size: 1.25rem;
-  color: var(--color-accent);
-}
-
-.home-visit p {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2rem;
   margin: 0;
-  font-size: 0.9375rem;
-  color: var(--color-muted);
+  padding: 0;
+  list-style: none;
 }
 
-.home-visit__links {
-  display: flex;
-  flex-wrap: wrap;
+.home-features__item {
+  display: grid;
   gap: 0.75rem;
-}
-
-.home-visit__link {
-  min-height: 2.75rem;
-  display: inline-flex;
-  align-items: center;
-  padding: 0.5rem 1.25rem;
-  border: 1px solid var(--color-accent);
-  background: #ffffff;
-  color: var(--color-accent);
+  color: var(--color-text);
   text-decoration: none;
 }
 
-.home-visit__link--primary {
-  background: var(--color-accent);
-  color: #ffffff;
+.home-features__item .placeholder-box {
+  aspect-ratio: 16 / 9;
 }
 
-.home-visit__link:hover {
-  background: var(--color-text);
-  border-color: var(--color-text);
-  color: #ffffff;
+.home-features__item:hover .placeholder-box {
+  border-color: var(--color-accent);
 }
 
-/* 補助の導線：文字だけで、主張を抑える */
-.home-guide {
+.home-features__title {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.home-features__body {
+  font-size: 0.9375rem;
+  color: var(--color-muted);
+  line-height: 1.7;
+}
+
+/* 店舗・ご相談：文字のリンクだけの一覧 */
+.home-visit__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--color-border);
+}
+
+.home-visit__list li {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.home-visit__list a {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 0.5rem 1.5rem;
-  padding-block: 2rem 3rem;
-  font-size: 0.875rem;
+  justify-content: space-between;
+  padding-block: 1rem;
+  color: var(--color-text);
+  text-decoration: none;
 }
 
-.home-guide a {
+.home-visit__list a::after {
+  content: "→";
   color: var(--color-muted);
 }
+
+.home-visit__list a:hover {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.home-empty {
+  padding-block: 2rem;
+  color: var(--color-muted);
+}
+
+/* 条件から探す（専用ページ） */
+.search-page {
+  padding-block: 3rem 4rem;
+}
+
+.search-page__header {
+  margin-block-end: 2rem;
+}
+
+.search-page__header h1 {
+  margin: 0 0 0.75rem;
+  font-size: 1.5rem;
+  letter-spacing: 0.04em;
+}
+
+.search-page__header p {
+  margin: 0;
+  color: var(--color-muted);
+}
+
+.search-page__results {
+  padding-block-start: 2.5rem;
+}
+
+.search-page__results h2 {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin: 0 0 1rem;
+  font-size: 1.125rem;
+}
+
+.search-page__count {
+  font-size: 0.875rem;
+  color: var(--color-muted);
+  font-weight: 400;
+}
+
+.search-page__empty {
+  color: var(--color-muted);
+}
+
+@media (max-width: 40rem) {
+  .home-categories__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .home-features__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .home-news__list a {
+    grid-template-columns: 6rem minmax(0, 1fr) 1rem;
+  }
+}
+
+/* トップの商品カルーセル。左端から商品を並べ、右側に次の商品を見せる。端までいったらループする
+   幅は var(--product-slide-width)、間隔は var(--product-gap) で調整する */
+.product-carousel-section {
+  padding-block: 2rem 2.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.product-carousel {
+  --product-slide-width: clamp(11rem, 20vw, 15rem);
+  --product-gap: 1.5rem;
+  position: relative;
+}
+
+.product-carousel__viewport {
+  overflow: hidden;
+  touch-action: pan-y;
+}
+
+.product-carousel__track {
+  display: flex;
+  gap: var(--product-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  transition: transform 650ms ease;
+}
+
+.product-carousel__slide {
+  flex: 0 0 var(--product-slide-width);
+  min-width: 0;
+}
+
+.product-carousel__card {
+  display: grid;
+  gap: 0.5rem;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.product-carousel__card:hover .product-carousel__name {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+/* 商品画像は準備中のため、枠だけ置く（デモ） */
+.product-carousel__image {
+  display: block;
+  aspect-ratio: 1 / 1;
+  background: #ffffff;
+  border: 1px solid var(--color-border);
+}
+
+.product-carousel__brand {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  color: var(--color-muted);
+}
+
+.product-carousel__name {
+  display: -webkit-box;
+  min-height: 3em;
+  overflow: hidden;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.product-carousel__price {
+  font-size: 1rem;
+  color: var(--color-accent);
+}
+
+.product-carousel__tax {
+  margin-inline-start: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--color-muted);
+}
+
+/* 矢印は44px四方以上（WCAG 2.2 2.5.8）。画像の高さの中央に重ねる */
+.product-carousel__arrow {
+  position: absolute;
+  top: calc(var(--product-slide-width) / 2);
+  z-index: 1;
+  translate: 0 -50%;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.8);
+  color: #ffffff;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.product-carousel__arrow:hover {
+  background: var(--color-accent);
+}
+
+.product-carousel__arrow--prev {
+  left: 0.5rem;
+}
+
+.product-carousel__arrow--next {
+  right: 0.5rem;
+}
+
+/* キーボード操作の目印は消さない（WCAG 2.2 2.4.13） */
+.product-carousel :focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product-carousel__track,
+  .product-carousel__arrow {
+    transition: none;
+  }
+}
+
+@media (max-width: 40rem) {
+  .product-carousel-section {
+    padding-block: 1.5rem 2rem;
+  }
+}
+
 
 /* 店舗ページ：店舗ごとに大きさと配置を変える */
 .stores-page {
@@ -1823,31 +1986,6 @@ button:disabled {
 }
 
 @media (max-width: 40rem) {
-  .home-section {
-    padding-block: 2.5rem 0;
-  }
-
-  .home-news {
-    grid-template-columns: minmax(0, 1fr);
-    padding-block: 2rem;
-  }
-
-  .home-tile--large,
-  .home-tile--square,
-  .home-tile--tall,
-  .home-tile--wide {
-    grid-column: span 6;
-  }
-
-  .home-tile--large {
-    grid-column: span 12;
-  }
-
-  .home-visit {
-    grid-template-columns: minmax(0, 1fr);
-    padding: 1.5rem;
-  }
-
   .stores-page__store,
   .stores-page__store--feature,
   .stores-page__store--square,
@@ -1860,4 +1998,3 @@ button:disabled {
     order: 0;
   }
 }
-

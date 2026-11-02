@@ -1,6 +1,4 @@
 import { fetchProducts, fetchNewsArticles, type Product } from "@/lib/api";
-import ProductGrid from "@/components/ProductGrid";
-import ProductSearchForm from "@/components/ProductSearchForm";
 import HeroCarousel from "@/components/HeroCarousel";
 import ProductCarousel from "@/components/ProductCarousel";
 
@@ -37,76 +35,47 @@ const HERO_SLIDES = [
   },
 ];
 
-// 商品カテゴリー。大きさ（size）を変えて、並びに強弱をつける
-const ITEM_TILES = [
-  { label: "リング", href: "/rings", size: "large" },
-  { label: "ネックレス", href: "/necklaces", size: "square" },
-  { label: "ピアス", href: "/earrings", size: "tall" },
-  { label: "イヤーカフ", href: "/ear-cuffs", size: "wide" },
-  { label: "ブレスレット", href: "/bracelets", size: "square" },
-  { label: "ルース（裸石）", href: "/loose-stones", size: "wide" },
+// 商品カテゴリー（同じ分類なので、枠の大きさはすべて揃える）
+const ITEM_CATEGORIES = [
+  { label: "リング", href: "/rings" },
+  { label: "ネックレス", href: "/necklaces" },
+  { label: "ピアス", href: "/earrings" },
+  { label: "イヤーカフ", href: "/ear-cuffs" },
+  { label: "ブレスレット", href: "/bracelets" },
+  { label: "ルース（裸石）", href: "/loose-stones" },
 ];
 
-export default async function HomePage({
-  searchParams,
-}: {
-  searchParams: Promise<{
-    q?: string;
-    gem_type?: string;
-    category?: string;
-    metal_type?: string;
-    birthstone_month?: string;
-    price_min?: string;
-    price_max?: string;
-  }>;
-}) {
-  const params = await searchParams;
-  const hasSearch = Boolean(
-    params.q ||
-      params.gem_type ||
-      params.category ||
-      params.metal_type ||
-      params.birthstone_month ||
-      params.price_min ||
-      params.price_max
-  );
+// 特集（分類が違うので、枠は商品カテゴリーより大きく見せる）
+const FEATURES = [
+  {
+    title: "ご購入ガイド",
+    body: "お支払い・お届け・返品・鑑定書の受け取りについて",
+    href: "/guide",
+  },
+  {
+    title: "店舗のご案内",
+    body: "完全予約制のサロン4店舗のご案内",
+    href: "/stores",
+  },
+];
 
+function formatDate(value: string | null): string | null {
+  if (!value) return null;
+  return new Date(value).toLocaleDateString("ja-JP", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+}
+
+export default async function HomePage() {
   // Laravel APIが未起動のうちはエラーになるため、catchして空の一覧にする
-  const products = await fetchProducts({
-    q: params.q,
-    gem_type: params.gem_type,
-    category: params.category,
-    metal_type: params.metal_type,
-    birthstone_month: params.birthstone_month ? Number(params.birthstone_month) : undefined,
-    price_min: params.price_min ? Number(params.price_min) : undefined,
-    price_max: params.price_max ? Number(params.price_max) : undefined,
-  }).catch(() => []);
+  const products = await fetchProducts().catch(() => []);
   const newsArticles = await fetchNewsArticles().catch(() => []);
-
-  if (hasSearch) {
-    return (
-      <div className="container">
-        <section style={{ padding: "48px 0 0" }}>
-          <h1 style={{ fontSize: "1.8rem", letterSpacing: "0.04em" }}>検索結果</h1>
-        </section>
-
-        <ProductSearchForm />
-
-        {products.length === 0 ? (
-          <p style={{ color: "var(--color-muted)", padding: "24px 0" }}>
-            条件に一致する商品がありませんでした。
-          </p>
-        ) : (
-          <ProductGrid products={products} />
-        )}
-      </div>
-    );
-  }
 
   const homeProducts: Product[] = products.filter(
     (p) => !HOME_EXCLUDED_SKUS.includes(p.sku ?? "")
   );
-  const [latestNews, ...olderNews] = newsArticles.slice(0, 4);
 
   return (
     <div>
@@ -117,32 +86,23 @@ export default async function HomePage({
       </section>
 
       <div className="container">
-        {latestNews && (
+        {newsArticles.length > 0 && (
           <section id="news" className="home-news" aria-labelledby="home-news-title">
             <div className="home-news__head">
               <h2 id="home-news-title">お知らせ</h2>
-              <a href="/news" className="home-news__all">
-                一覧を見る →
-              </a>
+              <a href="/news">すべてのお知らせ</a>
             </div>
-            <a href={`/news/${latestNews.id}`} className="home-news__lead">
-              {latestNews.published_at && (
-                <span className="home-news__date">
-                  {new Date(latestNews.published_at).toLocaleDateString("ja-JP")}
-                </span>
-              )}
-              <span>{latestNews.title}</span>
-            </a>
             <ul className="home-news__list">
-              {olderNews.slice(0, 2).map((article) => (
+              {newsArticles.slice(0, 3).map((article) => (
                 <li key={article.id}>
                   <a href={`/news/${article.id}`}>
-                    {article.published_at && (
-                      <span className="home-news__date">
-                        {new Date(article.published_at).toLocaleDateString("ja-JP")}
-                      </span>
-                    )}
-                    <span>{article.title}</span>
+                    <time className="home-news__date" dateTime={article.published_at ?? undefined}>
+                      {formatDate(article.published_at)}
+                    </time>
+                    <span className="home-news__title">{article.title}</span>
+                    <span className="home-news__arrow" aria-hidden="true">
+                      →
+                    </span>
                   </a>
                 </li>
               ))}
@@ -150,72 +110,70 @@ export default async function HomePage({
           </section>
         )}
 
-        <section id="categories" className="home-section" aria-labelledby="home-categories-title">
+        <section id="categories" className="home-categories" aria-labelledby="home-categories-title">
           <h2 id="home-categories-title" className="home-heading">
-            商品を探す
+            商品カテゴリー
           </h2>
-          <div className="home-mosaic">
-            {ITEM_TILES.map((tile) => (
-              <a
-                key={tile.href}
-                href={tile.href}
-                className={`home-tile home-tile--${tile.size}`}
-              >
-                <div className="placeholder-box" aria-hidden="true" />
-                <span className="home-tile__label">{tile.label}</span>
-              </a>
+          <ul className="home-categories__grid">
+            {ITEM_CATEGORIES.map((category) => (
+              <li key={category.href}>
+                <a href={category.href} className="home-categories__item">
+                  <span className="placeholder-box" aria-hidden="true" />
+                  <span className="home-categories__label">{category.label}</span>
+                </a>
+              </li>
             ))}
-          </div>
+          </ul>
+        </section>
+
+        <section id="features" className="home-features" aria-labelledby="home-features-title">
+          <h2 id="home-features-title" className="home-heading">
+            特集
+          </h2>
+          <ul className="home-features__grid">
+            {FEATURES.map((feature) => (
+              <li key={feature.href}>
+                <a href={feature.href} className="home-features__item">
+                  <span className="placeholder-box" aria-hidden="true" />
+                  <span className="home-features__title">{feature.title}</span>
+                  <span className="home-features__body">{feature.body}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
         </section>
 
         {homeProducts.length > 0 && (
           <section id="recommended" className="home-section" aria-labelledby="home-recommended-title">
-            <div className="home-heading-row">
-              <h2 id="home-recommended-title" className="home-heading">
-                今月のおすすめ
-              </h2>
-            </div>
+            <h2 id="home-recommended-title" className="home-heading">
+              今月のおすすめ
+            </h2>
             <ProductCarousel products={homeProducts} />
           </section>
         )}
 
-        <section id="search" className="home-section" aria-labelledby="home-search-title">
-          <h2 id="home-search-title" className="home-heading">
-            条件から探す
-          </h2>
-          <ProductSearchForm />
-        </section>
-
         {products.length === 0 && (
-          <p style={{ color: "var(--color-muted)", padding: "24px 0" }}>
+          <p className="home-empty">
             現在表示できる商品がありません（APIサーバーが起動しているか確認してください）。
           </p>
         )}
 
         <section id="visit" className="home-visit" aria-labelledby="home-visit-title">
-          <div className="home-visit__text">
-            <h2 id="home-visit-title">店舗でじっくりご相談ください</h2>
-            <p>完全予約制のサロンで、宝石の見方や商品のご相談を承ります。</p>
-          </div>
-          <div className="home-visit__links">
-            <a href="/stores" className="home-visit__link home-visit__link--primary">
-              店舗のご案内
-            </a>
-            <a href="/reserve/visit" className="home-visit__link">
-              来店予約
-            </a>
-            <a href="/reserve/online" className="home-visit__link">
-              オンライン相談
-            </a>
-          </div>
+          <h2 id="home-visit-title" className="home-heading">
+            店舗・ご相談
+          </h2>
+          <ul className="home-visit__list">
+            <li>
+              <a href="/stores">店舗のご案内</a>
+            </li>
+            <li>
+              <a href="/reserve/visit">来店予約</a>
+            </li>
+            <li>
+              <a href="/reserve/online">オンライン相談</a>
+            </li>
+          </ul>
         </section>
-
-        <nav className="home-guide" aria-label="ご案内">
-          <a href="/guide">ご購入ガイド</a>
-          <a href="/verify">鑑定書の真贋照会</a>
-          <a href="/register">会員登録</a>
-          <a href="/company">会社概要</a>
-        </nav>
       </div>
     </div>
   );

@@ -47,7 +47,7 @@ export default function ProductSearchForm() {
     if (values.birthstoneMonth) params.set("birthstone_month", values.birthstoneMonth);
     if (values.priceMin) params.set("price_min", values.priceMin);
     if (values.priceMax) params.set("price_max", values.priceMax);
-    router.push(`/?${params.toString()}`);
+    router.push(`/search?${params.toString()}`);
   };
 
   const handleSubmit = (e: FormEvent) => {
