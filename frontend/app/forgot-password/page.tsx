@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import Link from "next/link";
 import { forgotPassword } from "@/lib/api";
 
 export default function ForgotPasswordPage() {
@@ -9,14 +10,14 @@ export default function ForgotPasswordPage() {
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
     setMessage(null);
     setIsSubmitting(true);
 
     try {
-      const msg = await forgotPassword(email);
+      const msg = await forgotPassword(email.trim());
       setMessage(msg);
     } catch (err) {
       setError(err instanceof Error ? err.message : "送信に失敗しました");
@@ -35,23 +36,36 @@ export default function ForgotPasswordPage() {
         onSubmit={handleSubmit}
         style={{ display: "flex", flexDirection: "column", gap: 16 }}
       >
-        <label style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+        <label
+          htmlFor="forgot-password-email"
+          style={{ display: "flex", flexDirection: "column", gap: 4 }}
+        >
           メールアドレス
           <input
+            id="forgot-password-email"
             type="email"
             required
+            autoComplete="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
         </label>
-        {message && <p style={{ color: "var(--color-accent)" }}>{message}</p>}
-        {error && <p style={{ color: "var(--color-danger)" }}>{error}</p>}
+        {message && (
+          <p role="status" style={{ color: "var(--color-accent)" }}>
+            {message}
+          </p>
+        )}
+        {error && (
+          <p role="alert" style={{ color: "var(--color-danger)" }}>
+            {error}
+          </p>
+        )}
         <button type="submit" disabled={isSubmitting}>
           {isSubmitting ? "送信中..." : "送信する"}
         </button>
       </form>
       <p style={{ marginTop: 16, color: "var(--color-muted)" }}>
-        <a href="/login">ログインページに戻る</a>
+        <Link href="/login">ログインページに戻る</Link>
       </p>
     </div>
   );
